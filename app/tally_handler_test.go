@@ -48,9 +48,6 @@ func (suite *tallyHandlerSuite) SetupTest() {
 	suite.tallier = NewTallyHandler(
 		suite.app.GetGovKeeper(),
 		stakingKeeper,
-		suite.app.GetSavingsKeeper(),
-		suite.app.GetEarnKeeper(),
-		suite.app.GetLiquidKeeper(),
 		suite.app.GetBankKeeper(),
 	)
 }

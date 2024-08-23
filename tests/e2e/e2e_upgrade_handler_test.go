@@ -13,11 +13,11 @@ import (
 func (suite *IntegrationTestSuite) TestUpgradeParams_SDK() {
 	suite.SkipIfUpgradeDisabled()
 
-	beforeUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight - 1)
-	afterUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight)
+	beforeUpgradeCtx := suite.ZgChain.Grpc.CtxAtHeight(suite.UpgradeHeight - 1)
+	afterUpgradeCtx := suite.ZgChain.Grpc.CtxAtHeight(suite.UpgradeHeight)
 
 	// Before params
-	grpcClient := suite.Kava.Grpc
+	grpcClient := suite.ZgChain.Grpc
 	govParamsBefore, err := grpcClient.Query.Gov.Params(beforeUpgradeCtx, &govtypes.QueryParamsRequest{
 		ParamsType: govtypes.ParamDeposit,
 	})
@@ -47,13 +47,13 @@ func (suite *IntegrationTestSuite) TestUpgradeParams_SDK() {
 			"x/gov DepositParams max deposit period after upgrade should be 172800s",
 		)
 		suite.Assert().Equal(
-			[]sdk.Coin{{Denom: "ukava", Amount: sdk.NewInt(10_000_000)}},
+			[]sdk.Coin{{Denom: "ua0gi", Amount: sdk.NewInt(10_000_000)}},
 			govParamsAfter.DepositParams.MinDeposit,
 			"x/gov DepositParams min deposit after upgrade should be 10_000_000 ukava",
 		)
 
 		expectedParams := govtypes.Params{
-			MinDeposit:                 sdk.NewCoins(sdk.NewCoin("ukava", sdk.NewInt(10_000_000))),
+			MinDeposit:                 sdk.NewCoins(sdk.NewCoin("ua0gi", sdk.NewInt(10_000_000))),
 			MaxDepositPeriod:           mustParseDuration("172800s"),
 			VotingPeriod:               mustParseDuration("30s"),
 			Quorum:                     "0.334000000000000000",
@@ -71,9 +71,9 @@ func (suite *IntegrationTestSuite) TestUpgradeParams_SDK() {
 func (suite *IntegrationTestSuite) TestUpgradeParams_Consensus() {
 	suite.SkipIfUpgradeDisabled()
 
-	afterUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight)
+	afterUpgradeCtx := suite.ZgChain.Grpc.CtxAtHeight(suite.UpgradeHeight)
 
-	grpcClient := suite.Kava.Grpc
+	grpcClient := suite.ZgChain.Grpc
 	paramsAfter, err := grpcClient.Query.Consensus.Params(afterUpgradeCtx, &consensustypes.QueryParamsRequest{})
 	suite.NoError(err)
 
@@ -98,25 +98,25 @@ func (suite *IntegrationTestSuite) TestUpgradeParams_Consensus() {
 	suite.Require().Equal(expectedParams, *paramsAfter.Params, "x/consensus params after upgrade should be as expected")
 }
 
-func (suite *IntegrationTestSuite) TestUpgradeParams_CDP_Interval() {
-	suite.SkipIfUpgradeDisabled()
+// func (suite *IntegrationTestSuite) TestUpgradeParams_CDP_Interval() {
+// 	suite.SkipIfUpgradeDisabled()
 
-	beforeUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight - 1)
-	afterUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight)
+// 	beforeUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight - 1)
+// 	afterUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight)
 
-	grpcClient := suite.Kava.Grpc
+// 	grpcClient := suite.Kava.Grpc
 
-	paramsBefore, err := grpcClient.Query.Cdp.Params(beforeUpgradeCtx, &cdptypes.QueryParamsRequest{})
-	suite.Require().NoError(err)
-	paramsAfter, err := grpcClient.Query.Cdp.Params(afterUpgradeCtx, &cdptypes.QueryParamsRequest{})
-	suite.Require().NoError(err)
+// 	paramsBefore, err := grpcClient.Query.Cdp.Params(beforeUpgradeCtx, &cdptypes.QueryParamsRequest{})
+// 	suite.Require().NoError(err)
+// 	paramsAfter, err := grpcClient.Query.Cdp.Params(afterUpgradeCtx, &cdptypes.QueryParamsRequest{})
+// 	suite.Require().NoError(err)
 
-	expectedParams := paramsBefore.Params
-	expectedParams.LiquidationBlockInterval = int64(50)
+// 	expectedParams := paramsBefore.Params
+// 	expectedParams.LiquidationBlockInterval = int64(50)
 
-	suite.Require().Equal(expectedParams, paramsAfter.Params,
-		"expected cdp parameters to equal previous parameters with a liquidation block interval of 100")
-}
+// 	suite.Require().Equal(expectedParams, paramsAfter.Params,
+// 		"expected cdp parameters to equal previous parameters with a liquidation block interval of 100")
+// }
 
 func mustParseDuration(s string) *time.Duration {
 	d, err := time.ParseDuration(s)

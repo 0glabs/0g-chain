@@ -85,18 +85,18 @@ func (suite *IntegrationTestSuite) TestEip712BasicMessageAuthorization() {
 	suite.NoError(err)
 
 	// broadcast tx
-	res, err := suite.ZgChain.Tx.BroadcastTx(context.Background(), &txtypes.BroadcastTxRequest{
+	res, err := suite.ZgChain.Grpc.Query.Tx.BroadcastTx(context.Background(), &txtypes.BroadcastTxRequest{
 		TxBytes: txBytes,
 		Mode:    txtypes.BroadcastMode_BROADCAST_MODE_SYNC,
 	})
 	suite.NoError(err)
 	suite.Equal(sdkerrors.SuccessABCICode, res.TxResponse.Code)
 
-	_, err = util.WaitForSdkTxCommit(suite.ZgChain.Tx, res.TxResponse.TxHash, 6*time.Second)
+	_, err = util.WaitForSdkTxCommit(suite.ZgChain.Grpc.Query.Tx, res.TxResponse.TxHash, 6*time.Second)
 	suite.NoError(err)
 
 	// check that the message was processed & the gas denom is transferred.
-	balRes, err := suite.ZgChain.Bank.Balance(context.Background(), &banktypes.QueryBalanceRequest{
+	balRes, err := suite.ZgChain.Grpc.Query.Bank.Balance(context.Background(), &banktypes.QueryBalanceRequest{
 		Address: receiver.String(),
 		Denom:   chaincfg.GasDenom,
 	})

@@ -55,20 +55,10 @@ func TestNewQueryClient_ValidClient(t *testing.T) {
 		require.NotNil(t, client.IbcTransfer)
 
 		// validate kava clients
-		require.NotNil(t, client.Auction)
 		require.NotNil(t, client.Bep3)
-		require.NotNil(t, client.Cdp)
 		require.NotNil(t, client.Committee)
-		require.NotNil(t, client.Community)
-		require.NotNil(t, client.Earn)
 		require.NotNil(t, client.Evmutil)
-		require.NotNil(t, client.Hard)
-		require.NotNil(t, client.Incentive)
 		require.NotNil(t, client.Issuance)
-		require.NotNil(t, client.Kavadist)
-		require.NotNil(t, client.Liquid)
 		require.NotNil(t, client.Pricefeed)
-		require.NotNil(t, client.Savings)
-		require.NotNil(t, client.Swap)
 	})
 }

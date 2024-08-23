@@ -1,5 +1,5 @@
 syntax = "proto3";
-package zg.validatorvesting.v1beta1;
+package zgc.validatorvesting.v1beta1;
 
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";

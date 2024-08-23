@@ -7,9 +7,9 @@ import (
 	"github.com/0glabs/0g-chain/client/grpc/util"
 )
 
-// KavaGrpcClient enables the usage of kava grpc query clients and query utils
-type KavaGrpcClient struct {
-	config KavaGrpcClientConfig
+// ZgChainGrpcClient enables the usage of kava grpc query clients and query utils
+type ZgChainGrpcClient struct {
+	config ZgChainGrpcClientConfig
 
 	// Query clients for cosmos and kava modules
 	Query *query.QueryClient
@@ -18,18 +18,18 @@ type KavaGrpcClient struct {
 	*util.Util
 }
 
-// KavaGrpcClientConfig is a configuration struct for a KavaGrpcClient
-type KavaGrpcClientConfig struct {
+// ZgChainGrpcClientConfig is a configuration struct for a ZgChainGrpcClient
+type ZgChainGrpcClientConfig struct {
 	// note: add future config options here
 }
 
-// NewClient creates a new KavaGrpcClient via a grpc url
-func NewClient(grpcUrl string) (*KavaGrpcClient, error) {
+// NewClient creates a new ZgChainGrpcClient via a grpc url
+func NewClient(grpcUrl string) (*ZgChainGrpcClient, error) {
 	return NewClientWithConfig(grpcUrl, NewDefaultConfig())
 }
 
-// NewClientWithConfig creates a new KavaGrpcClient via a grpc url and config
-func NewClientWithConfig(grpcUrl string, config KavaGrpcClientConfig) (*KavaGrpcClient, error) {
+// NewClientWithConfig creates a new ZgChainGrpcClient via a grpc url and config
+func NewClientWithConfig(grpcUrl string, config ZgChainGrpcClientConfig) (*ZgChainGrpcClient, error) {
 	if grpcUrl == "" {
 		return nil, errors.New("grpc url cannot be empty")
 	}
@@ -37,7 +37,7 @@ func NewClientWithConfig(grpcUrl string, config KavaGrpcClientConfig) (*KavaGrpc
 	if error != nil {
 		return nil, error
 	}
-	client := &KavaGrpcClient{
+	client := &ZgChainGrpcClient{
 		Query:  query,
 		Util:   util.NewUtil(query),
 		config: config,
@@ -45,6 +45,6 @@ func NewClientWithConfig(grpcUrl string, config KavaGrpcClientConfig) (*KavaGrpc
 	return client, nil
 }
 
-func NewDefaultConfig() KavaGrpcClientConfig {
-	return KavaGrpcClientConfig{}
+func NewDefaultConfig() ZgChainGrpcClientConfig {
+	return ZgChainGrpcClientConfig{}
 }

@@ -1,0 +1,42 @@
+FROM --platform=linux/amd64 ubuntu:24.04
+
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    git \
+    sudo \
+    wget \
+    jq \
+    make \
+    gcc \
+    unzip && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Go
+RUN wget https://golang.org/dl/go1.22.5.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.22.5.linux-amd64.tar.gz && \
+    rm go1.22.5.linux-amd64.tar.gz
+# Set Go environment variables
+ENV GOPATH=/root/go
+ENV PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+# Create Go workspace directory
+RUN mkdir -p /root/go
+
+WORKDIR /root
+
+# https://docs.0g.ai/0g-doc/run-a-node/validator-node
+RUN git clone -b v0.2.3 https://github.com/0glabs/0g-chain.git
+RUN ./0g-chain/networks/testnet/install.sh
+
+RUN 0gchaind config chain-id zgtendermint_16600-2
+
+RUN 0gchaind init testnetnode --chain-id zgtendermint_16600-2
+
+RUN rm ~/.0gchain/config/genesis.json
+RUN wget -P ~/.0gchain/config https://github.com/0glabs/0g-chain/releases/download/v0.2.3/genesis.json
+
+RUN 0gchaind validate-genesis
+
+RUN sed -i 's|seeds = ""|seeds = "81987895a11f6689ada254c6b57932ab7ed909b6@54.241.167.190:26656,010fb4de28667725a4fef26cdc7f9452cc34b16d@54.176.175.48:26656,e9b4bc203197b62cc7e6a80a64742e752f4210d5@54.193.250.204:26656,68b9145889e7576b652ca68d985826abd46ad660@18.166.164.232:26656"|' $HOME/.0gchain/config/config.toml
+
+ENTRYPOINT ["0gchaind", "start"]

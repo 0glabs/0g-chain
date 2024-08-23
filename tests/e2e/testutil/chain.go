@@ -21,14 +21,11 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 
-	evmtypes "github.com/evmos/ethermint/x/evm/types"
-
 	"github.com/0glabs/0g-chain/app"
 	chainparams "github.com/0glabs/0g-chain/app/params"
+	"github.com/0glabs/0g-chain/client/grpc"
 	"github.com/0glabs/0g-chain/tests/e2e/runner"
 	"github.com/0glabs/0g-chain/tests/util"
-	committeetypes "github.com/0glabs/0g-chain/x/committee/types"
-	evmutiltypes "github.com/0glabs/0g-chain/x/evmutil/types"
 )
 
 // Chain wraps query clients & accounts for a network
@@ -46,23 +43,9 @@ type Chain struct {
 
 	EncodingConfig chainparams.EncodingConfig
 
-	Auth         authtypes.QueryClient
-	Authz        authz.QueryClient
-	Bank         banktypes.QueryClient
-	Committee    committeetypes.QueryClient
-	Distribution distrtypes.QueryClient
-	Evm          evmtypes.QueryClient
-	Evmutil      evmutiltypes.QueryClient
-	Gov          govv1types.QueryClient
-	Mint         minttypes.QueryClient
-	Staking      stakingtypes.QueryClient
-	Tm           tmservice.ServiceClient
-	Tx           txtypes.ServiceClient
-	Upgrade      upgradetypes.QueryClient
-
 	TmSignClient tmclient.SignClient
 
-	Grpc *grpc.KavaGrpcClient
+	Grpc *grpc.ZgChainGrpcClient
 }
 
 // NewChain creates the query clients & signing account management for a chain run on a set of ports.
@@ -94,7 +77,7 @@ func NewChain(t *testing.T, details *runner.ChainDetails, fundedAccountMnemonic 
 
 	client, err := grpc.NewClient(details.GrpcUrl)
 	if err != nil {
-		chain.t.Fatalf("failed to create kava grpc client: %s", err)
+		chain.t.Fatalf("failed to create 0g-chain grpc client: %s", err)
 	}
 	chain.Grpc = client
 
@@ -107,21 +90,6 @@ func NewChain(t *testing.T, details *runner.ChainDetails, fundedAccountMnemonic 
 	if err != nil {
 		return chain, err
 	}
-
-	chain.Auth = authtypes.NewQueryClient(grpcConn)
-	chain.Authz = authz.NewQueryClient(grpcConn)
-	chain.Bank = banktypes.NewQueryClient(grpcConn)
-
-	chain.Committee = committeetypes.NewQueryClient(grpcConn)
-	chain.Distribution = distrtypes.NewQueryClient(grpcConn)
-	chain.Evm = evmtypes.NewQueryClient(grpcConn)
-	chain.Evmutil = evmutiltypes.NewQueryClient(grpcConn)
-	chain.Gov = govv1types.NewQueryClient(grpcConn)
-	chain.Mint = minttypes.NewQueryClient(grpcConn)
-	chain.Staking = stakingtypes.NewQueryClient(grpcConn)
-	chain.Tm = tmservice.NewServiceClient(grpcConn)
-	chain.Tx = txtypes.NewServiceClient(grpcConn)
-	chain.Upgrade = upgradetypes.NewQueryClient(grpcConn)
 
 	// initialize accounts map
 	chain.accounts = make(map[string]*SigningAccount)

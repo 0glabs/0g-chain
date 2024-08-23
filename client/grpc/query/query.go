@@ -60,21 +60,11 @@ type QueryClient struct {
 
 	// kava module query clients
 
-	Auction   auctiontypes.QueryClient
 	Bep3      bep3types.QueryClient
-	Cdp       cdptypes.QueryClient
 	Committee committeetypes.QueryClient
-	Community communitytypes.QueryClient
-	Earn      earntypes.QueryClient
 	Evmutil   evmutiltypes.QueryClient
-	Hard      hardtypes.QueryClient
-	Incentive incentivetypes.QueryClient
 	Issuance  issuancetypes.QueryClient
-	Kavadist  kavadisttypes.QueryClient
-	Liquid    liquidtypes.QueryClient
 	Pricefeed pricefeedtypes.QueryClient
-	Savings   savingstypes.QueryClient
-	Swap      swaptypes.QueryClient
 }
 
 // NewQueryClient creates a new QueryClient and initializes all the module query clients
@@ -105,21 +95,11 @@ func NewQueryClient(grpcEndpoint string) (*QueryClient, error) {
 		IbcClient:   ibcclienttypes.NewQueryClient(conn),
 		IbcTransfer: ibctransfertypes.NewQueryClient(conn),
 
-		Auction:   auctiontypes.NewQueryClient(conn),
 		Bep3:      bep3types.NewQueryClient(conn),
-		Cdp:       cdptypes.NewQueryClient(conn),
 		Committee: committeetypes.NewQueryClient(conn),
-		Community: communitytypes.NewQueryClient(conn),
-		Earn:      earntypes.NewQueryClient(conn),
 		Evmutil:   evmutiltypes.NewQueryClient(conn),
-		Hard:      hardtypes.NewQueryClient(conn),
-		Incentive: incentivetypes.NewQueryClient(conn),
 		Issuance:  issuancetypes.NewQueryClient(conn),
-		Kavadist:  kavadisttypes.NewQueryClient(conn),
-		Liquid:    liquidtypes.NewQueryClient(conn),
 		Pricefeed: pricefeedtypes.NewQueryClient(conn),
-		Savings:   savingstypes.NewQueryClient(conn),
-		Swap:      swaptypes.NewQueryClient(conn),
 	}
 	return client, nil
 }

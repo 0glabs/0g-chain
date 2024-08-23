@@ -47,7 +47,7 @@ func (suite *IntegrationTestSuite) TestChainID() {
 	suite.Equal(expectedEvmNetworkId, evmNetworkId)
 
 	// SDK query
-	nodeInfo, err := suite.ZgChain.Tm.GetNodeInfo(context.Background(), &tmservice.GetNodeInfoRequest{})
+	nodeInfo, err := suite.ZgChain.Grpc.Query.Tm.GetNodeInfo(context.Background(), &tmservice.GetNodeInfoRequest{})
 	suite.NoError(err)
 	suite.Equal(suite.ZgChain.ChainID, nodeInfo.DefaultNodeInfo.Network)
 }
@@ -62,7 +62,7 @@ func (suite *IntegrationTestSuite) TestFundedAccount() {
 	suite.Equal(acc.EvmAddress.Hex(), util.SdkToEvmAddress(acc.SdkAddress).Hex())
 
 	// check balance via SDK query
-	res, err := suite.ZgChain.Bank.Balance(context.Background(), banktypes.NewQueryBalanceRequest(
+	res, err := suite.ZgChain.Grpc.Query.Bank.Balance(context.Background(), banktypes.NewQueryBalanceRequest(
 		acc.SdkAddress, chaincfg.GasDenom,
 	))
 	suite.NoError(err)

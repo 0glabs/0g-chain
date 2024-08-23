@@ -5,6 +5,7 @@ go 1.21
 require (
 	cosmossdk.io/errors v1.0.1
 	cosmossdk.io/math v1.3.0
+	cosmossdk.io/simapp v0.0.0-20231127212628-044ff4d8c015
 	github.com/cenkalti/backoff/v4 v4.1.3
 	github.com/cometbft/cometbft v0.37.4
 	github.com/cometbft/cometbft-db v0.9.1
@@ -52,7 +53,6 @@ require (
 	cosmossdk.io/core v0.6.1 // indirect
 	cosmossdk.io/depinject v1.0.0-alpha.4 // indirect
 	cosmossdk.io/log v1.3.1 // indirect
-	cosmossdk.io/simapp v0.0.0-20231127212628-044ff4d8c015 // indirect
 	cosmossdk.io/tools/rosetta v0.2.1 // indirect
 	filippo.io/edwards25519 v1.0.0 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
@@ -234,7 +234,7 @@ replace (
 	// Use go-ethereum fork with precompiles
 	github.com/ethereum/go-ethereum => github.com/evmos/go-ethereum v1.10.26-evmos-rc2
 	// Use ethermint fork that respects min-gas-price with NoBaseFee true and london enabled, and includes eip712 support
-	github.com/evmos/ethermint => github.com/0glabs/ethermint v0.21.0-0g.v3.0.2
+	github.com/evmos/ethermint => github.com/0glabs/ethermint v0.21.0-0g.v3.0.3
 	// See https://github.com/cosmos/cosmos-sdk/pull/10401, https://github.com/cosmos/cosmos-sdk/commit/0592ba6158cd0bf49d894be1cef4faeec59e8320
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.0
 	// Downgraded to avoid bugs in following commits which causes "version does not exist" errors

@@ -27,7 +27,7 @@ func (suite *E2eTestSuite) InitZgChainEvmData() {
 	}
 
 	// expect the erc20 to be enabled for conversion to sdk.Coin
-	params, err := suite.ZgChain.Evmutil.Params(context.Background(), &evmutiltypes.QueryParamsRequest{})
+	params, err := suite.ZgChain.Grpc.Query.Evmutil.Params(context.Background(), &evmutiltypes.QueryParamsRequest{})
 	if err != nil {
 		panic(fmt.Sprintf("failed to fetch evmutil params during init: %s", err))
 	}
