@@ -1,59 +1,37 @@
-<!---
+<br />
 <p align="center">
-  <img src="./0g-logo.svg" width="300">
+  <img src="https://framerusercontent.com/images/JJi9BT4FAjp4W63c3jjNz0eezQ.png" alt="Logo" width="140" height="140">
 </p>
---->
+<p align="center">
+    <b><font size="5">0G is limitless scalability</font></b>
+</p>
+<br />
 
 # 0G Chain
+Zero Gravity (0G) is the foundational infrastructure for high-performance dapps and chains particularly for AI. 
 
-<div align="center">
+It efficiently orchestrates utilization of hardware resources such as storage and compute and software assets such as data and models to handle the scale and complexity of AI workloads.
 
-### [Telegram](https://t.me/web3_0glabs) | [Discord](https://discord.com/invite/0glabs)
+Continue reading [here](https://0g-doc-new.vercel.app/intro) if you want to learn more about 0G dAIOS and how its various layers enable limitless scalability.
 
-</div>
+## 0G Product Suite
+- DA: ultra high-performance data availability layer with KZG and quorum-based DAS
+- Storage: decentralized storage with erasure coding and replication
+- Inference Serving: flexible serving framework for inferences and finetuning
+- Network: high-performance, low-latency, and decentralized network
 
-Reference implementation of 0G Chain, the first modular AI chain. Built using the [cosmos-sdk](https://github.com/cosmos/cosmos-sdk).
+## Documentation
+- If you want to build with 0G's network, DA layer, inference serving, or storage SDK, please refer to the [Build with 0G Documentation](https://0g-doc-new.vercel.app/).
 
-<!---
-## Mainnet
+- If you want to run a validator node, DA node, or storage node, please refer to the [Run a Node Documentation](https://0g-doc-new.vercel.app/run-a-node/overview).
 
-The current recommended version of the software for mainnet is [v0.25.0](https://github.com/Kava-Labs/kava/releases/tag/v0.25.0) The master branch of this repository often contains considerable development work since the last mainnet release and is __not__ runnable on mainnet.
 
-### Installation and Setup
-For detailed instructions see [the Kava docs](https://docs.kava.io/docs/participate/validator-node).
+## Support and Additional Resources
+We want to do everything we can to help you be successful while working on your contribution and projects. Here you'll find various resources and communities that may help you complete a project or contribute to 0G. 
 
-```bash
-git checkout v0.25.0
-make install
-```
+### Communities
+- [0G Telegram](https://t.me/web3_0glabs)
+- [0G Discord](https://discord.com/invite/0glabs)
 
-End-to-end tests of Kava use a tool for generating networks with different configurations: [kvtool](https://github.com/Kava-Labs/kvtool).
-This is included as a git submodule at [`tests/e2e/kvtool`](tests/e2e/kvtool/).
-When first cloning the repository, if you intend to run the e2e integration tests, you must also
-clone the submodules:
-```bash
-git clone --recurse-submodules https://github.com/Kava-Labs/kava.git
-```
 
-Or, if you have already cloned the repo: `git submodule update --init`
 
-## Testnet
-
-For further information on joining the testnet, head over to the [testnet repo](https://github.com/Kava-Labs/kava-testnets).
-
-## Docs
-
-Kava protocol and client documentation can be found in the [Kava docs](https://docs.kava.io).
-
-If you have technical questions or concerns, ask a developer or community member in the [Kava discord](https://discord.com/invite/kQzh3Uv).
-
-## Security
-
-If you find a security issue, please report it to security [at] kava.io. Depending on the verification and severity, a bug bounty may be available.
-
-## License
-
-Copyright © Kava Labs, Inc. All rights reserved.
-
-Licensed under the [Apache v2 License](LICENSE.md).
---->
