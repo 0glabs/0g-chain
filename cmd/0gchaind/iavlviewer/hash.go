@@ -28,11 +28,7 @@ func newHashCmd(opts ethermintserver.StartOptions) *cobra.Command {
 				return err
 			}
 
-			hash, err := tree.Hash()
-			if err != nil {
-				return err
-			}
-			fmt.Printf("Hash: %X\n", hash)
+			fmt.Printf("Hash: %X\n", tree.Hash())
 
 			return nil
 		},

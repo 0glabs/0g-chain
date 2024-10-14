@@ -22,6 +22,8 @@
   },
   "app_hash": "",
   "app_state": {
+    "06-solomachine": null,
+    "07-tendermint": null,
     "auction": {
       "next_auction_id": "1",
       "params": {
@@ -506,6 +508,10 @@
           "address": "kava1vlpsrmdyuywvaqrv7rx6xga224sqfwz3fyfhwq",
           "coins": [
             {
+              "denom": "bnb",
+              "amount": "500000000"
+            },
+            {
               "denom": "btcb",
               "amount": "200000000"
             },
@@ -524,6 +530,10 @@
             {
               "denom": "erc20/axelar/wbtc",
               "amount": "1000000000"
+            },
+            {
+              "denom": "erc20/bitgo/wbtc",
+              "amount": "200000000"
             },
             {
               "denom": "erc20/multichain/usdc",
@@ -556,12 +566,20 @@
             {
               "denom": "usdx",
               "amount": "103000000000"
+            },
+            {
+              "denom": "xrpb",
+              "amount": "1000000000000000"
             }
           ]
         },
         {
           "address": "kava1krh7k30pc9rteejpl2zycj0vau58y8c69xkzws",
           "coins": [
+            {
+              "denom": "bnb",
+              "amount": "100000000000000000"
+            },
             {
               "denom": "btcb",
               "amount": "200000000"
@@ -583,6 +601,10 @@
               "amount": "1000000000"
             },
             {
+              "denom": "erc20/bitgo/wbtc",
+              "amount": "200000000"
+            },
+            {
               "denom": "erc20/tether/usdt",
               "amount": "100000000000"
             },
@@ -600,6 +622,10 @@
             },
             {
               "denom": "usdx",
+              "amount": "103000000000"
+            },
+            {
+              "denom": "xrpb",
               "amount": "103000000000"
             }
           ]
@@ -822,6 +848,7 @@
       "gov_denom": "ukava",
       "params": {
         "circuit_breaker": false,
+        "liquidation_block_interval": 500,
         "collateral_params": [
           {
             "denom": "bnb",
@@ -993,8 +1020,7 @@
             "check_collateralization_index_count": "10",
             "conversion_factor": "6"
           }
-        ]
-        ,
+        ],
         "debt_auction_lot": "10000000000",
         "debt_auction_threshold": "100000000000",
         "debt_param": {
@@ -1241,7 +1267,15 @@
       "votes": []
     },
     "community": {
-      "params": {}
+      "params": {
+        "upgrade_time_disable_inflation": "2023-11-01T00:00:00Z",
+        "upgrade_time_set_staking_rewards_per_second": "744191",
+        "staking_rewards_per_second": "0"
+      },
+      "staking_rewards_state": {
+        "last_accumulation_time": "0001-01-01T00:00:00Z",
+        "last_truncation_error": "0"
+      }
     },
     "crisis": {
       "constant_fee": {
@@ -2067,6 +2101,25 @@
               }
             ],
             "nested_types": []
+          },
+          {
+            "msg_type_url": "/kava.committee.v1beta1.MsgVote",
+            "msg_value_type_name": "MsgValueCommitteeVote",
+            "value_types": [
+              {
+                "name": "proposal_id",
+                "type": "uint64"
+              },
+              {
+                "name": "voter",
+                "type": "string"
+              },
+              {
+                "name": "vote_type",
+                "type": "int32"
+              }
+            ],
+            "nested_types": []
           }
         ],
         "allow_unprotected_txs": false
@@ -2229,22 +2282,27 @@
       "deposits": [],
       "votes": [],
       "proposals": [],
-      "deposit_params": {
+      "deposit_params": null,
+      "voting_params": {
+        "voting_period": "604800s"
+      },
+      "tally_params": null,
+      "params": {
         "min_deposit": [
           {
             "denom": "ukava",
             "amount": "10000000"
           }
         ],
-        "max_deposit_period": "172800s"
-      },
-      "voting_params": {
-        "voting_period": "600s"
-      },
-      "tally_params": {
+        "max_deposit_period": "172800s",
+        "voting_period": "604800s",
         "quorum": "0.334000000000000000",
         "threshold": "0.500000000000000000",
-        "veto_threshold": "0.334000000000000000"
+        "veto_threshold": "0.334000000000000000",
+        "min_initial_deposit_ratio": "0.000000000000000000",
+        "burn_vote_quorum": false,
+        "burn_proposal_deposit_prevote": false,
+        "burn_vote_veto": true
       }
     },
     "hard": {
@@ -2519,6 +2577,24 @@
             },
             "reserve_factor": "0.025000000000000000",
             "keeper_reward_percentage": "0.020000000000000000"
+          },
+          {
+            "denom": "erc20/bitgo/wbtc",
+            "borrow_limit": {
+              "has_max_limit": true,
+              "maximum_limit": "0.000000000000000000",
+              "loan_to_value": "0.000000000000000000"
+            },
+            "spot_market_id": "btc:usd:30",
+            "conversion_factor": "100000000",
+            "interest_rate_model": {
+              "base_rate_apy": "0.000000000000000000",
+              "base_multiplier": "0.050000000000000000",
+              "kink": "0.800000000000000000",
+              "jump_multiplier": "5.000000000000000000"
+            },
+            "reserve_factor": "0.025000000000000000",
+            "keeper_reward_percentage": "0.020000000000000000"
           }
         ],
         "minimum_borrow_usd_value": "10.000000000000000000"
@@ -2728,6 +2804,18 @@
             "collateral_type": "erc20/tether/usdt",
             "start": "2023-06-21T15:00:00Z",
             "end": "2024-06-21T15:00:00Z",
+            "rewards_per_second": [
+              {
+                "denom": "ukava",
+                "amount": "787"
+              }
+            ]
+          },
+          {
+            "active": true,
+            "collateral_type": "erc20/bitgo/wbtc",
+            "start": "2022-11-11T15:00:00Z",
+            "end": "2025-11-11T15:00:00Z",
             "rewards_per_second": [
               {
                 "denom": "ukava",
@@ -3170,6 +3258,16 @@
       }
     },
     "params": null,
+    "packetfowardmiddleware": {
+      "params": {
+        "fee_percentage": "0.000000000000000000"
+      },
+      "in_flight_packets": {}
+    },
+    "precisebank": {
+      "balances": [],
+      "remainder": "0"
+    },
     "pricefeed": {
       "params": {
         "markets": [
@@ -3643,6 +3741,7 @@
         }
       ]
     },
+    "router": {},
     "savings": {
       "params": {
         "supported_denoms": [
@@ -3814,7 +3913,8 @@
       "params": {
         "send_enabled": true,
         "receive_enabled": true
-      }
+      },
+      "total_escrowed": []
     },
     "upgrade": {},
     "validatorvesting": null,

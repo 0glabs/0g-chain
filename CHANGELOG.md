@@ -39,6 +39,16 @@ Ref: https://keepachangelog.com/en/1.0.0/
 ## [v0.26.0]
 
 ### Features
+- (precisebank) [#1906] Add new `x/precisebank` module with bank decimal extension for EVM usage.
+- (cli) [#1922] Add `iavlviewer` CLI command for low-level iavl db debugging.
+
+### Improvements
+- (rocksdb) [#1903] Bump cometbft-db dependency for use with rocksdb v8.10.0
+- (deps) [#1988] Bump cometbft to v0.37.9-kava.1
+
+## [v0.26.0]
+
+### Features
 
 - (cli) [#1785] Add `shard` CLI command to support creating partitions of data for standalone nodes
 - (cdp) [#1818] Add module param and logic for running x/cdp begin blocker every `n` blocks
@@ -330,6 +340,10 @@ the [changelog](https://github.com/cosmos/cosmos-sdk/blob/v0.38.4/CHANGELOG.md).
 - [#257](https://github.com/Kava-Labs/kava/pulls/257) Include scripts to run
   large-scale simulations remotely using aws-batch
 
+[#1988]: https://github.com/Kava-Labs/kava/pull/1988
+[#1922]: https://github.com/Kava-Labs/kava/pull/1922
+[#1906]: https://github.com/Kava-Labs/kava/pull/1906
+[#1903]: https://github.com/Kava-Labs/kava/pull/1903
 [#1846]: https://github.com/Kava-Labs/kava/pull/1846
 [#1848]: https://github.com/Kava-Labs/kava/pull/1848
 [#1839]: https://github.com/Kava-Labs/kava/pull/1839
@@ -392,8 +406,9 @@ the [changelog](https://github.com/cosmos/cosmos-sdk/blob/v0.38.4/CHANGELOG.md).
 [#750]: https://github.com/Kava-Labs/kava/pull/750
 [#751]: https://github.com/Kava-Labs/kava/pull/751
 [#780]: https://github.com/Kava-Labs/kava/pull/780
-[unreleased]: https://github.com/Kava-Labs/kava/compare/v0.25.0...HEAD
-[v0.25.0]: https://github.com/Kava-Labs/kava/compare/v0.25.0...v0.24.3
+[unreleased]: https://github.com/Kava-Labs/kava/compare/v0.26.0...HEAD
+[v0.26.0]: https://github.com/Kava-Labs/kava/compare/v0.25.0...v0.26.0
+[v0.25.0]: https://github.com/Kava-Labs/kava/compare/v0.24.3...v0.25.0
 [v0.24.3]: https://github.com/Kava-Labs/kava/compare/v0.24.3...v0.24.1
 [v0.24.1]: https://github.com/Kava-Labs/kava/compare/v0.24.1...v0.24.0
 [v0.24.0]: https://github.com/Kava-Labs/kava/compare/v0.24.0...v0.23.2

@@ -35,6 +35,35 @@ jobs:
         run: make test
       - name: run e2e tests
         run: make docker-build test-e2e
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo from current commit
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: |
+            go.sum
+      - name: run fuzz tests
+        run: make test-fuzz
+  ibc-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo from current commit
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: tests/e2e-ibc/go.mod
+          cache-dependency-path: |
+            tests/e2e-ibc/go.sum
+            go.sum
+      - name: run ibc e2e tests
+        run: make test-ibc
   validate-internal-testnet-genesis:
     runs-on: ubuntu-latest
     steps:
@@ -44,16 +73,10 @@ jobs:
         id: kava-version
         run: |
           echo "KAVA_VERSION=$(cat ./ci/env/kava-internal-testnet/KAVA.VERSION)" >> $GITHUB_OUTPUT
-      - name: checkout repo from master
+      - name: checkout version of kava that will be deployed if this pr is merged
         uses: actions/checkout@v4
         with:
-          ref: master
-      - name: checkout version of kava that will be deployed if this pr is merged
-        run: |
-          git pull -p
-          git checkout $KAVA_VERSION
-        env:
-          KAVA_VERSION: ${{ steps.kava-version.outputs.KAVA_VERSION }}
+          ref: ${{ steps.kava-version.outputs.KAVA_VERSION }}
       - name: Set up Go
         uses: actions/setup-go@v4
         with:

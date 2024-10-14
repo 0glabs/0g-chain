@@ -358,7 +358,7 @@ func (s *ZgChainSigner) Run(requests <-chan ZgChainMsgRequest) (<-chan ZgChainMs
 						currentRequest = nil
 					}
 
-					// immediatley response to channel
+					// immediately response to channel
 					responses <- *response
 					// go to next request
 					broadcastTxSeq++

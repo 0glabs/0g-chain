@@ -47,6 +47,7 @@ import (
 	committeekeeper "github.com/0glabs/0g-chain/x/committee/keeper"
 	evmutilkeeper "github.com/0glabs/0g-chain/x/evmutil/keeper"
 	issuancekeeper "github.com/0glabs/0g-chain/x/issuance/keeper"
+	precisebankkeeper "github.com/0glabs/0g-chain/x/precisebank/keeper"
 	pricefeedkeeper "github.com/0glabs/0g-chain/x/pricefeed/keeper"
 )
 
@@ -99,26 +100,31 @@ func NewTestAppFromSealed() TestApp {
 }
 
 // nolint
-func (tApp TestApp) GetAccountKeeper() authkeeper.AccountKeeper { return tApp.accountKeeper }
-func (tApp TestApp) GetBankKeeper() bankkeeper.Keeper           { return tApp.bankKeeper }
-func (tApp TestApp) GetMintKeeper() mintkeeper.Keeper           { return tApp.mintKeeper }
-func (tApp TestApp) GetStakingKeeper() *stakingkeeper.Keeper    { return tApp.stakingKeeper }
-func (tApp TestApp) GetSlashingKeeper() slashingkeeper.Keeper   { return tApp.slashingKeeper }
-func (tApp TestApp) GetDistrKeeper() distkeeper.Keeper          { return tApp.distrKeeper }
-func (tApp TestApp) GetGovKeeper() govkeeper.Keeper             { return tApp.govKeeper }
-func (tApp TestApp) GetCrisisKeeper() crisiskeeper.Keeper       { return tApp.crisisKeeper }
-func (tApp TestApp) GetParamsKeeper() paramskeeper.Keeper       { return tApp.paramsKeeper }
-func (tApp TestApp) GetIssuanceKeeper() issuancekeeper.Keeper   { return tApp.issuanceKeeper }
-func (tApp TestApp) GetBep3Keeper() bep3keeper.Keeper           { return tApp.bep3Keeper }
-func (tApp TestApp) GetPriceFeedKeeper() pricefeedkeeper.Keeper { return tApp.pricefeedKeeper }
-func (tApp TestApp) GetCommitteeKeeper() committeekeeper.Keeper { return tApp.committeeKeeper }
-func (tApp TestApp) GetEvmutilKeeper() evmutilkeeper.Keeper     { return tApp.evmutilKeeper }
-func (tApp TestApp) GetEvmKeeper() *evmkeeper.Keeper            { return tApp.evmKeeper }
-func (tApp TestApp) GetFeeMarketKeeper() feemarketkeeper.Keeper { return tApp.feeMarketKeeper }
-func (tApp TestApp) GetDASignersKeeper() dasignerskeeper.Keeper { return tApp.dasignersKeeper }
+func (tApp TestApp) GetAccountKeeper() authkeeper.AccountKeeper     { return tApp.accountKeeper }
+func (tApp TestApp) GetBankKeeper() bankkeeper.Keeper               { return tApp.bankKeeper }
+func (tApp TestApp) GetMintKeeper() mintkeeper.Keeper               { return tApp.mintKeeper }
+func (tApp TestApp) GetStakingKeeper() *stakingkeeper.Keeper        { return tApp.stakingKeeper }
+func (tApp TestApp) GetSlashingKeeper() slashingkeeper.Keeper       { return tApp.slashingKeeper }
+func (tApp TestApp) GetDistrKeeper() distkeeper.Keeper              { return tApp.distrKeeper }
+func (tApp TestApp) GetGovKeeper() govkeeper.Keeper                 { return tApp.govKeeper }
+func (tApp TestApp) GetCrisisKeeper() crisiskeeper.Keeper           { return tApp.crisisKeeper }
+func (tApp TestApp) GetParamsKeeper() paramskeeper.Keeper           { return tApp.paramsKeeper }
+func (tApp TestApp) GetIssuanceKeeper() issuancekeeper.Keeper       { return tApp.issuanceKeeper }
+func (tApp TestApp) GetBep3Keeper() bep3keeper.Keeper               { return tApp.bep3Keeper }
+func (tApp TestApp) GetPriceFeedKeeper() pricefeedkeeper.Keeper     { return tApp.pricefeedKeeper }
+func (tApp TestApp) GetCommitteeKeeper() committeekeeper.Keeper     { return tApp.committeeKeeper }
+func (tApp TestApp) GetEvmutilKeeper() evmutilkeeper.Keeper         { return tApp.evmutilKeeper }
+func (tApp TestApp) GetEvmKeeper() *evmkeeper.Keeper                { return tApp.evmKeeper }
+func (tApp TestApp) GetFeeMarketKeeper() feemarketkeeper.Keeper     { return tApp.feeMarketKeeper }
+func (tApp TestApp) GetDASignersKeeper() dasignerskeeper.Keeper     { return tApp.dasignersKeeper }
+func (tApp TestApp) GetPrecisebankKeeper() precisebankkeeper.Keeper { return tApp.precisebankKeeper }
 
 func (tApp TestApp) GetKVStoreKey(key string) *storetypes.KVStoreKey {
 	return tApp.keys[key]
+}
+
+func (tApp TestApp) GetBlockedMaccAddrs() map[string]bool {
+	return tApp.loadBlockedMaccAddrs()
 }
 
 // LegacyAmino returns the app's amino codec.
@@ -465,7 +471,7 @@ func (tApp TestApp) SetInflation(ctx sdk.Context, value sdk.Dec) {
 	mk.SetParams(ctx, mintParams)
 }
 
-// GeneratePrivKeyAddressPairsFromRand generates (deterministically) a total of n private keys and addresses.
+// GeneratePrivKeyAddressPairs generates (deterministically) a total of n private keys and addresses.
 func GeneratePrivKeyAddressPairs(n int) (keys []cryptotypes.PrivKey, addrs []sdk.AccAddress) {
 	r := rand.New(rand.NewSource(12345)) // make the generation deterministic
 	keys = make([]cryptotypes.PrivKey, n)

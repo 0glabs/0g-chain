@@ -4,256 +4,595 @@
 
 ## Table of Contents
 
-- [crypto/vrf/keys.proto](#crypto/vrf/keys.proto)
-    - [PrivKey](#crypto.vrf.PrivKey)
-    - [PubKey](#crypto.vrf.PubKey)
+- [kava/auction/v1beta1/auction.proto](#kava/auction/v1beta1/auction.proto)
+    - [BaseAuction](#kava.auction.v1beta1.BaseAuction)
+    - [CollateralAuction](#kava.auction.v1beta1.CollateralAuction)
+    - [DebtAuction](#kava.auction.v1beta1.DebtAuction)
+    - [SurplusAuction](#kava.auction.v1beta1.SurplusAuction)
+    - [WeightedAddresses](#kava.auction.v1beta1.WeightedAddresses)
   
-- [zgc/bep3/v1beta1/bep3.proto](#zgc/bep3/v1beta1/bep3.proto)
-    - [AssetParam](#zgc.bep3.v1beta1.AssetParam)
-    - [AssetSupply](#zgc.bep3.v1beta1.AssetSupply)
-    - [AtomicSwap](#zgc.bep3.v1beta1.AtomicSwap)
-    - [Params](#zgc.bep3.v1beta1.Params)
-    - [SupplyLimit](#zgc.bep3.v1beta1.SupplyLimit)
+- [kava/auction/v1beta1/genesis.proto](#kava/auction/v1beta1/genesis.proto)
+    - [GenesisState](#kava.auction.v1beta1.GenesisState)
+    - [Params](#kava.auction.v1beta1.Params)
   
-    - [SwapDirection](#zgc.bep3.v1beta1.SwapDirection)
-    - [SwapStatus](#zgc.bep3.v1beta1.SwapStatus)
+- [kava/auction/v1beta1/query.proto](#kava/auction/v1beta1/query.proto)
+    - [QueryAuctionRequest](#kava.auction.v1beta1.QueryAuctionRequest)
+    - [QueryAuctionResponse](#kava.auction.v1beta1.QueryAuctionResponse)
+    - [QueryAuctionsRequest](#kava.auction.v1beta1.QueryAuctionsRequest)
+    - [QueryAuctionsResponse](#kava.auction.v1beta1.QueryAuctionsResponse)
+    - [QueryNextAuctionIDRequest](#kava.auction.v1beta1.QueryNextAuctionIDRequest)
+    - [QueryNextAuctionIDResponse](#kava.auction.v1beta1.QueryNextAuctionIDResponse)
+    - [QueryParamsRequest](#kava.auction.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.auction.v1beta1.QueryParamsResponse)
   
-- [zgc/bep3/v1beta1/genesis.proto](#zgc/bep3/v1beta1/genesis.proto)
-    - [GenesisState](#zgc.bep3.v1beta1.GenesisState)
+    - [Query](#kava.auction.v1beta1.Query)
   
-- [zgc/bep3/v1beta1/query.proto](#zgc/bep3/v1beta1/query.proto)
-    - [AssetSupplyResponse](#zgc.bep3.v1beta1.AssetSupplyResponse)
-    - [AtomicSwapResponse](#zgc.bep3.v1beta1.AtomicSwapResponse)
-    - [QueryAssetSuppliesRequest](#zgc.bep3.v1beta1.QueryAssetSuppliesRequest)
-    - [QueryAssetSuppliesResponse](#zgc.bep3.v1beta1.QueryAssetSuppliesResponse)
-    - [QueryAssetSupplyRequest](#zgc.bep3.v1beta1.QueryAssetSupplyRequest)
-    - [QueryAssetSupplyResponse](#zgc.bep3.v1beta1.QueryAssetSupplyResponse)
-    - [QueryAtomicSwapRequest](#zgc.bep3.v1beta1.QueryAtomicSwapRequest)
-    - [QueryAtomicSwapResponse](#zgc.bep3.v1beta1.QueryAtomicSwapResponse)
-    - [QueryAtomicSwapsRequest](#zgc.bep3.v1beta1.QueryAtomicSwapsRequest)
-    - [QueryAtomicSwapsResponse](#zgc.bep3.v1beta1.QueryAtomicSwapsResponse)
-    - [QueryParamsRequest](#zgc.bep3.v1beta1.QueryParamsRequest)
-    - [QueryParamsResponse](#zgc.bep3.v1beta1.QueryParamsResponse)
+- [kava/auction/v1beta1/tx.proto](#kava/auction/v1beta1/tx.proto)
+    - [MsgPlaceBid](#kava.auction.v1beta1.MsgPlaceBid)
+    - [MsgPlaceBidResponse](#kava.auction.v1beta1.MsgPlaceBidResponse)
   
-    - [Query](#zgc.bep3.v1beta1.Query)
+    - [Msg](#kava.auction.v1beta1.Msg)
   
-- [zgc/bep3/v1beta1/tx.proto](#zgc/bep3/v1beta1/tx.proto)
-    - [MsgClaimAtomicSwap](#zgc.bep3.v1beta1.MsgClaimAtomicSwap)
-    - [MsgClaimAtomicSwapResponse](#zgc.bep3.v1beta1.MsgClaimAtomicSwapResponse)
-    - [MsgCreateAtomicSwap](#zgc.bep3.v1beta1.MsgCreateAtomicSwap)
-    - [MsgCreateAtomicSwapResponse](#zgc.bep3.v1beta1.MsgCreateAtomicSwapResponse)
-    - [MsgRefundAtomicSwap](#zgc.bep3.v1beta1.MsgRefundAtomicSwap)
-    - [MsgRefundAtomicSwapResponse](#zgc.bep3.v1beta1.MsgRefundAtomicSwapResponse)
+- [kava/bep3/v1beta1/bep3.proto](#kava/bep3/v1beta1/bep3.proto)
+    - [AssetParam](#kava.bep3.v1beta1.AssetParam)
+    - [AssetSupply](#kava.bep3.v1beta1.AssetSupply)
+    - [AtomicSwap](#kava.bep3.v1beta1.AtomicSwap)
+    - [Params](#kava.bep3.v1beta1.Params)
+    - [SupplyLimit](#kava.bep3.v1beta1.SupplyLimit)
   
-    - [Msg](#zgc.bep3.v1beta1.Msg)
+    - [SwapDirection](#kava.bep3.v1beta1.SwapDirection)
+    - [SwapStatus](#kava.bep3.v1beta1.SwapStatus)
   
-- [zgc/committee/v1beta1/committee.proto](#zgc/committee/v1beta1/committee.proto)
-    - [BaseCommittee](#zgc.committee.v1beta1.BaseCommittee)
-    - [MemberCommittee](#zgc.committee.v1beta1.MemberCommittee)
-    - [TokenCommittee](#zgc.committee.v1beta1.TokenCommittee)
+- [kava/bep3/v1beta1/genesis.proto](#kava/bep3/v1beta1/genesis.proto)
+    - [GenesisState](#kava.bep3.v1beta1.GenesisState)
   
-    - [TallyOption](#zgc.committee.v1beta1.TallyOption)
+- [kava/bep3/v1beta1/query.proto](#kava/bep3/v1beta1/query.proto)
+    - [AssetSupplyResponse](#kava.bep3.v1beta1.AssetSupplyResponse)
+    - [AtomicSwapResponse](#kava.bep3.v1beta1.AtomicSwapResponse)
+    - [QueryAssetSuppliesRequest](#kava.bep3.v1beta1.QueryAssetSuppliesRequest)
+    - [QueryAssetSuppliesResponse](#kava.bep3.v1beta1.QueryAssetSuppliesResponse)
+    - [QueryAssetSupplyRequest](#kava.bep3.v1beta1.QueryAssetSupplyRequest)
+    - [QueryAssetSupplyResponse](#kava.bep3.v1beta1.QueryAssetSupplyResponse)
+    - [QueryAtomicSwapRequest](#kava.bep3.v1beta1.QueryAtomicSwapRequest)
+    - [QueryAtomicSwapResponse](#kava.bep3.v1beta1.QueryAtomicSwapResponse)
+    - [QueryAtomicSwapsRequest](#kava.bep3.v1beta1.QueryAtomicSwapsRequest)
+    - [QueryAtomicSwapsResponse](#kava.bep3.v1beta1.QueryAtomicSwapsResponse)
+    - [QueryParamsRequest](#kava.bep3.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.bep3.v1beta1.QueryParamsResponse)
   
-- [zgc/committee/v1beta1/genesis.proto](#zgc/committee/v1beta1/genesis.proto)
-    - [GenesisState](#zgc.committee.v1beta1.GenesisState)
-    - [Proposal](#zgc.committee.v1beta1.Proposal)
-    - [Vote](#zgc.committee.v1beta1.Vote)
+    - [Query](#kava.bep3.v1beta1.Query)
   
-    - [VoteType](#zgc.committee.v1beta1.VoteType)
+- [kava/bep3/v1beta1/tx.proto](#kava/bep3/v1beta1/tx.proto)
+    - [MsgClaimAtomicSwap](#kava.bep3.v1beta1.MsgClaimAtomicSwap)
+    - [MsgClaimAtomicSwapResponse](#kava.bep3.v1beta1.MsgClaimAtomicSwapResponse)
+    - [MsgCreateAtomicSwap](#kava.bep3.v1beta1.MsgCreateAtomicSwap)
+    - [MsgCreateAtomicSwapResponse](#kava.bep3.v1beta1.MsgCreateAtomicSwapResponse)
+    - [MsgRefundAtomicSwap](#kava.bep3.v1beta1.MsgRefundAtomicSwap)
+    - [MsgRefundAtomicSwapResponse](#kava.bep3.v1beta1.MsgRefundAtomicSwapResponse)
   
-- [zgc/committee/v1beta1/permissions.proto](#zgc/committee/v1beta1/permissions.proto)
-    - [AllowedParamsChange](#zgc.committee.v1beta1.AllowedParamsChange)
-    - [CommunityCDPRepayDebtPermission](#zgc.committee.v1beta1.CommunityCDPRepayDebtPermission)
-    - [CommunityCDPWithdrawCollateralPermission](#zgc.committee.v1beta1.CommunityCDPWithdrawCollateralPermission)
-    - [CommunityPoolLendWithdrawPermission](#zgc.committee.v1beta1.CommunityPoolLendWithdrawPermission)
-    - [GodPermission](#zgc.committee.v1beta1.GodPermission)
-    - [ParamsChangePermission](#zgc.committee.v1beta1.ParamsChangePermission)
-    - [SoftwareUpgradePermission](#zgc.committee.v1beta1.SoftwareUpgradePermission)
-    - [SubparamRequirement](#zgc.committee.v1beta1.SubparamRequirement)
-    - [TextPermission](#zgc.committee.v1beta1.TextPermission)
+    - [Msg](#kava.bep3.v1beta1.Msg)
   
-- [zgc/committee/v1beta1/proposal.proto](#zgc/committee/v1beta1/proposal.proto)
-    - [CommitteeChangeProposal](#zgc.committee.v1beta1.CommitteeChangeProposal)
-    - [CommitteeDeleteProposal](#zgc.committee.v1beta1.CommitteeDeleteProposal)
+- [kava/cdp/v1beta1/cdp.proto](#kava/cdp/v1beta1/cdp.proto)
+    - [CDP](#kava.cdp.v1beta1.CDP)
+    - [Deposit](#kava.cdp.v1beta1.Deposit)
+    - [OwnerCDPIndex](#kava.cdp.v1beta1.OwnerCDPIndex)
+    - [TotalCollateral](#kava.cdp.v1beta1.TotalCollateral)
+    - [TotalPrincipal](#kava.cdp.v1beta1.TotalPrincipal)
   
-- [zgc/committee/v1beta1/query.proto](#zgc/committee/v1beta1/query.proto)
-    - [QueryCommitteeRequest](#zgc.committee.v1beta1.QueryCommitteeRequest)
-    - [QueryCommitteeResponse](#zgc.committee.v1beta1.QueryCommitteeResponse)
-    - [QueryCommitteesRequest](#zgc.committee.v1beta1.QueryCommitteesRequest)
-    - [QueryCommitteesResponse](#zgc.committee.v1beta1.QueryCommitteesResponse)
-    - [QueryNextProposalIDRequest](#zgc.committee.v1beta1.QueryNextProposalIDRequest)
-    - [QueryNextProposalIDResponse](#zgc.committee.v1beta1.QueryNextProposalIDResponse)
-    - [QueryProposalRequest](#zgc.committee.v1beta1.QueryProposalRequest)
-    - [QueryProposalResponse](#zgc.committee.v1beta1.QueryProposalResponse)
-    - [QueryProposalsRequest](#zgc.committee.v1beta1.QueryProposalsRequest)
-    - [QueryProposalsResponse](#zgc.committee.v1beta1.QueryProposalsResponse)
-    - [QueryRawParamsRequest](#zgc.committee.v1beta1.QueryRawParamsRequest)
-    - [QueryRawParamsResponse](#zgc.committee.v1beta1.QueryRawParamsResponse)
-    - [QueryTallyRequest](#zgc.committee.v1beta1.QueryTallyRequest)
-    - [QueryTallyResponse](#zgc.committee.v1beta1.QueryTallyResponse)
-    - [QueryVoteRequest](#zgc.committee.v1beta1.QueryVoteRequest)
-    - [QueryVoteResponse](#zgc.committee.v1beta1.QueryVoteResponse)
-    - [QueryVotesRequest](#zgc.committee.v1beta1.QueryVotesRequest)
-    - [QueryVotesResponse](#zgc.committee.v1beta1.QueryVotesResponse)
+- [kava/cdp/v1beta1/genesis.proto](#kava/cdp/v1beta1/genesis.proto)
+    - [CollateralParam](#kava.cdp.v1beta1.CollateralParam)
+    - [DebtParam](#kava.cdp.v1beta1.DebtParam)
+    - [GenesisAccumulationTime](#kava.cdp.v1beta1.GenesisAccumulationTime)
+    - [GenesisState](#kava.cdp.v1beta1.GenesisState)
+    - [GenesisTotalPrincipal](#kava.cdp.v1beta1.GenesisTotalPrincipal)
+    - [Params](#kava.cdp.v1beta1.Params)
   
-    - [Query](#zgc.committee.v1beta1.Query)
+- [kava/cdp/v1beta1/query.proto](#kava/cdp/v1beta1/query.proto)
+    - [CDPResponse](#kava.cdp.v1beta1.CDPResponse)
+    - [QueryAccountsRequest](#kava.cdp.v1beta1.QueryAccountsRequest)
+    - [QueryAccountsResponse](#kava.cdp.v1beta1.QueryAccountsResponse)
+    - [QueryCdpRequest](#kava.cdp.v1beta1.QueryCdpRequest)
+    - [QueryCdpResponse](#kava.cdp.v1beta1.QueryCdpResponse)
+    - [QueryCdpsRequest](#kava.cdp.v1beta1.QueryCdpsRequest)
+    - [QueryCdpsResponse](#kava.cdp.v1beta1.QueryCdpsResponse)
+    - [QueryDepositsRequest](#kava.cdp.v1beta1.QueryDepositsRequest)
+    - [QueryDepositsResponse](#kava.cdp.v1beta1.QueryDepositsResponse)
+    - [QueryParamsRequest](#kava.cdp.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.cdp.v1beta1.QueryParamsResponse)
+    - [QueryTotalCollateralRequest](#kava.cdp.v1beta1.QueryTotalCollateralRequest)
+    - [QueryTotalCollateralResponse](#kava.cdp.v1beta1.QueryTotalCollateralResponse)
+    - [QueryTotalPrincipalRequest](#kava.cdp.v1beta1.QueryTotalPrincipalRequest)
+    - [QueryTotalPrincipalResponse](#kava.cdp.v1beta1.QueryTotalPrincipalResponse)
   
-- [zgc/committee/v1beta1/tx.proto](#zgc/committee/v1beta1/tx.proto)
-    - [MsgSubmitProposal](#zgc.committee.v1beta1.MsgSubmitProposal)
-    - [MsgSubmitProposalResponse](#zgc.committee.v1beta1.MsgSubmitProposalResponse)
-    - [MsgVote](#zgc.committee.v1beta1.MsgVote)
-    - [MsgVoteResponse](#zgc.committee.v1beta1.MsgVoteResponse)
+    - [Query](#kava.cdp.v1beta1.Query)
   
-    - [Msg](#zgc.committee.v1beta1.Msg)
+- [kava/cdp/v1beta1/tx.proto](#kava/cdp/v1beta1/tx.proto)
+    - [MsgCreateCDP](#kava.cdp.v1beta1.MsgCreateCDP)
+    - [MsgCreateCDPResponse](#kava.cdp.v1beta1.MsgCreateCDPResponse)
+    - [MsgDeposit](#kava.cdp.v1beta1.MsgDeposit)
+    - [MsgDepositResponse](#kava.cdp.v1beta1.MsgDepositResponse)
+    - [MsgDrawDebt](#kava.cdp.v1beta1.MsgDrawDebt)
+    - [MsgDrawDebtResponse](#kava.cdp.v1beta1.MsgDrawDebtResponse)
+    - [MsgLiquidate](#kava.cdp.v1beta1.MsgLiquidate)
+    - [MsgLiquidateResponse](#kava.cdp.v1beta1.MsgLiquidateResponse)
+    - [MsgRepayDebt](#kava.cdp.v1beta1.MsgRepayDebt)
+    - [MsgRepayDebtResponse](#kava.cdp.v1beta1.MsgRepayDebtResponse)
+    - [MsgWithdraw](#kava.cdp.v1beta1.MsgWithdraw)
+    - [MsgWithdrawResponse](#kava.cdp.v1beta1.MsgWithdrawResponse)
   
-- [zgc/council/v1/genesis.proto](#zgc/council/v1/genesis.proto)
-    - [Ballot](#zgc.council.v1.Ballot)
-    - [Council](#zgc.council.v1.Council)
-    - [GenesisState](#zgc.council.v1.GenesisState)
-    - [Params](#zgc.council.v1.Params)
-    - [Vote](#zgc.council.v1.Vote)
+    - [Msg](#kava.cdp.v1beta1.Msg)
   
-- [zgc/council/v1/query.proto](#zgc/council/v1/query.proto)
-    - [QueryCurrentCouncilIDRequest](#zgc.council.v1.QueryCurrentCouncilIDRequest)
-    - [QueryCurrentCouncilIDResponse](#zgc.council.v1.QueryCurrentCouncilIDResponse)
-    - [QueryRegisteredVotersRequest](#zgc.council.v1.QueryRegisteredVotersRequest)
-    - [QueryRegisteredVotersResponse](#zgc.council.v1.QueryRegisteredVotersResponse)
+- [kava/committee/v1beta1/committee.proto](#kava/committee/v1beta1/committee.proto)
+    - [BaseCommittee](#kava.committee.v1beta1.BaseCommittee)
+    - [MemberCommittee](#kava.committee.v1beta1.MemberCommittee)
+    - [TokenCommittee](#kava.committee.v1beta1.TokenCommittee)
   
-    - [Query](#zgc.council.v1.Query)
+    - [TallyOption](#kava.committee.v1beta1.TallyOption)
   
-- [zgc/council/v1/tx.proto](#zgc/council/v1/tx.proto)
-    - [MsgRegister](#zgc.council.v1.MsgRegister)
-    - [MsgRegisterResponse](#zgc.council.v1.MsgRegisterResponse)
-    - [MsgVote](#zgc.council.v1.MsgVote)
-    - [MsgVoteResponse](#zgc.council.v1.MsgVoteResponse)
+- [kava/committee/v1beta1/genesis.proto](#kava/committee/v1beta1/genesis.proto)
+    - [GenesisState](#kava.committee.v1beta1.GenesisState)
+    - [Proposal](#kava.committee.v1beta1.Proposal)
+    - [Vote](#kava.committee.v1beta1.Vote)
   
-    - [Msg](#zgc.council.v1.Msg)
+    - [VoteType](#kava.committee.v1beta1.VoteType)
   
-- [zgc/dasigners/v1/dasigners.proto](#zgc/dasigners/v1/dasigners.proto)
-    - [Quorum](#zgc.dasigners.v1.Quorum)
-    - [Quorums](#zgc.dasigners.v1.Quorums)
-    - [Signer](#zgc.dasigners.v1.Signer)
+- [kava/committee/v1beta1/permissions.proto](#kava/committee/v1beta1/permissions.proto)
+    - [AllowedParamsChange](#kava.committee.v1beta1.AllowedParamsChange)
+    - [CommunityCDPRepayDebtPermission](#kava.committee.v1beta1.CommunityCDPRepayDebtPermission)
+    - [CommunityCDPWithdrawCollateralPermission](#kava.committee.v1beta1.CommunityCDPWithdrawCollateralPermission)
+    - [CommunityPoolLendWithdrawPermission](#kava.committee.v1beta1.CommunityPoolLendWithdrawPermission)
+    - [GodPermission](#kava.committee.v1beta1.GodPermission)
+    - [ParamsChangePermission](#kava.committee.v1beta1.ParamsChangePermission)
+    - [SoftwareUpgradePermission](#kava.committee.v1beta1.SoftwareUpgradePermission)
+    - [SubparamRequirement](#kava.committee.v1beta1.SubparamRequirement)
+    - [TextPermission](#kava.committee.v1beta1.TextPermission)
   
-- [zgc/dasigners/v1/genesis.proto](#zgc/dasigners/v1/genesis.proto)
-    - [GenesisState](#zgc.dasigners.v1.GenesisState)
-    - [Params](#zgc.dasigners.v1.Params)
+- [kava/committee/v1beta1/proposal.proto](#kava/committee/v1beta1/proposal.proto)
+    - [CommitteeChangeProposal](#kava.committee.v1beta1.CommitteeChangeProposal)
+    - [CommitteeDeleteProposal](#kava.committee.v1beta1.CommitteeDeleteProposal)
   
-- [zgc/dasigners/v1/query.proto](#zgc/dasigners/v1/query.proto)
-    - [QueryAggregatePubkeyG1Request](#zgc.dasigners.v1.QueryAggregatePubkeyG1Request)
-    - [QueryAggregatePubkeyG1Response](#zgc.dasigners.v1.QueryAggregatePubkeyG1Response)
-    - [QueryEpochNumberRequest](#zgc.dasigners.v1.QueryEpochNumberRequest)
-    - [QueryEpochNumberResponse](#zgc.dasigners.v1.QueryEpochNumberResponse)
-    - [QueryEpochQuorumRequest](#zgc.dasigners.v1.QueryEpochQuorumRequest)
-    - [QueryEpochQuorumResponse](#zgc.dasigners.v1.QueryEpochQuorumResponse)
-    - [QueryEpochQuorumRowRequest](#zgc.dasigners.v1.QueryEpochQuorumRowRequest)
-    - [QueryEpochQuorumRowResponse](#zgc.dasigners.v1.QueryEpochQuorumRowResponse)
-    - [QueryQuorumCountRequest](#zgc.dasigners.v1.QueryQuorumCountRequest)
-    - [QueryQuorumCountResponse](#zgc.dasigners.v1.QueryQuorumCountResponse)
-    - [QuerySignerRequest](#zgc.dasigners.v1.QuerySignerRequest)
-    - [QuerySignerResponse](#zgc.dasigners.v1.QuerySignerResponse)
+- [kava/committee/v1beta1/query.proto](#kava/committee/v1beta1/query.proto)
+    - [QueryCommitteeRequest](#kava.committee.v1beta1.QueryCommitteeRequest)
+    - [QueryCommitteeResponse](#kava.committee.v1beta1.QueryCommitteeResponse)
+    - [QueryCommitteesRequest](#kava.committee.v1beta1.QueryCommitteesRequest)
+    - [QueryCommitteesResponse](#kava.committee.v1beta1.QueryCommitteesResponse)
+    - [QueryNextProposalIDRequest](#kava.committee.v1beta1.QueryNextProposalIDRequest)
+    - [QueryNextProposalIDResponse](#kava.committee.v1beta1.QueryNextProposalIDResponse)
+    - [QueryProposalRequest](#kava.committee.v1beta1.QueryProposalRequest)
+    - [QueryProposalResponse](#kava.committee.v1beta1.QueryProposalResponse)
+    - [QueryProposalsRequest](#kava.committee.v1beta1.QueryProposalsRequest)
+    - [QueryProposalsResponse](#kava.committee.v1beta1.QueryProposalsResponse)
+    - [QueryRawParamsRequest](#kava.committee.v1beta1.QueryRawParamsRequest)
+    - [QueryRawParamsResponse](#kava.committee.v1beta1.QueryRawParamsResponse)
+    - [QueryTallyRequest](#kava.committee.v1beta1.QueryTallyRequest)
+    - [QueryTallyResponse](#kava.committee.v1beta1.QueryTallyResponse)
+    - [QueryVoteRequest](#kava.committee.v1beta1.QueryVoteRequest)
+    - [QueryVoteResponse](#kava.committee.v1beta1.QueryVoteResponse)
+    - [QueryVotesRequest](#kava.committee.v1beta1.QueryVotesRequest)
+    - [QueryVotesResponse](#kava.committee.v1beta1.QueryVotesResponse)
   
-    - [Query](#zgc.dasigners.v1.Query)
+    - [Query](#kava.committee.v1beta1.Query)
   
-- [zgc/dasigners/v1/tx.proto](#zgc/dasigners/v1/tx.proto)
-    - [MsgRegisterNextEpoch](#zgc.dasigners.v1.MsgRegisterNextEpoch)
-    - [MsgRegisterNextEpochResponse](#zgc.dasigners.v1.MsgRegisterNextEpochResponse)
-    - [MsgRegisterSigner](#zgc.dasigners.v1.MsgRegisterSigner)
-    - [MsgRegisterSignerResponse](#zgc.dasigners.v1.MsgRegisterSignerResponse)
-    - [MsgUpdateSocket](#zgc.dasigners.v1.MsgUpdateSocket)
-    - [MsgUpdateSocketResponse](#zgc.dasigners.v1.MsgUpdateSocketResponse)
+- [kava/committee/v1beta1/tx.proto](#kava/committee/v1beta1/tx.proto)
+    - [MsgSubmitProposal](#kava.committee.v1beta1.MsgSubmitProposal)
+    - [MsgSubmitProposalResponse](#kava.committee.v1beta1.MsgSubmitProposalResponse)
+    - [MsgVote](#kava.committee.v1beta1.MsgVote)
+    - [MsgVoteResponse](#kava.committee.v1beta1.MsgVoteResponse)
   
-    - [Msg](#zgc.dasigners.v1.Msg)
+    - [Msg](#kava.committee.v1beta1.Msg)
   
-- [zgc/evmutil/v1beta1/conversion_pair.proto](#zgc/evmutil/v1beta1/conversion_pair.proto)
-    - [AllowedCosmosCoinERC20Token](#zgc.evmutil.v1beta1.AllowedCosmosCoinERC20Token)
-    - [ConversionPair](#zgc.evmutil.v1beta1.ConversionPair)
+- [kava/community/v1beta1/params.proto](#kava/community/v1beta1/params.proto)
+    - [Params](#kava.community.v1beta1.Params)
   
-- [zgc/evmutil/v1beta1/genesis.proto](#zgc/evmutil/v1beta1/genesis.proto)
-    - [Account](#zgc.evmutil.v1beta1.Account)
-    - [GenesisState](#zgc.evmutil.v1beta1.GenesisState)
-    - [Params](#zgc.evmutil.v1beta1.Params)
+- [kava/community/v1beta1/staking.proto](#kava/community/v1beta1/staking.proto)
+    - [StakingRewardsState](#kava.community.v1beta1.StakingRewardsState)
   
-- [zgc/evmutil/v1beta1/query.proto](#zgc/evmutil/v1beta1/query.proto)
-    - [DeployedCosmosCoinContract](#zgc.evmutil.v1beta1.DeployedCosmosCoinContract)
-    - [QueryDeployedCosmosCoinContractsRequest](#zgc.evmutil.v1beta1.QueryDeployedCosmosCoinContractsRequest)
-    - [QueryDeployedCosmosCoinContractsResponse](#zgc.evmutil.v1beta1.QueryDeployedCosmosCoinContractsResponse)
-    - [QueryParamsRequest](#zgc.evmutil.v1beta1.QueryParamsRequest)
-    - [QueryParamsResponse](#zgc.evmutil.v1beta1.QueryParamsResponse)
+- [kava/community/v1beta1/genesis.proto](#kava/community/v1beta1/genesis.proto)
+    - [GenesisState](#kava.community.v1beta1.GenesisState)
   
-    - [Query](#zgc.evmutil.v1beta1.Query)
+- [kava/community/v1beta1/proposal.proto](#kava/community/v1beta1/proposal.proto)
+    - [CommunityCDPRepayDebtProposal](#kava.community.v1beta1.CommunityCDPRepayDebtProposal)
+    - [CommunityCDPWithdrawCollateralProposal](#kava.community.v1beta1.CommunityCDPWithdrawCollateralProposal)
+    - [CommunityPoolLendDepositProposal](#kava.community.v1beta1.CommunityPoolLendDepositProposal)
+    - [CommunityPoolLendWithdrawProposal](#kava.community.v1beta1.CommunityPoolLendWithdrawProposal)
   
-- [zgc/evmutil/v1beta1/tx.proto](#zgc/evmutil/v1beta1/tx.proto)
-    - [MsgConvertCoinToERC20](#zgc.evmutil.v1beta1.MsgConvertCoinToERC20)
-    - [MsgConvertCoinToERC20Response](#zgc.evmutil.v1beta1.MsgConvertCoinToERC20Response)
-    - [MsgConvertCosmosCoinFromERC20](#zgc.evmutil.v1beta1.MsgConvertCosmosCoinFromERC20)
-    - [MsgConvertCosmosCoinFromERC20Response](#zgc.evmutil.v1beta1.MsgConvertCosmosCoinFromERC20Response)
-    - [MsgConvertCosmosCoinToERC20](#zgc.evmutil.v1beta1.MsgConvertCosmosCoinToERC20)
-    - [MsgConvertCosmosCoinToERC20Response](#zgc.evmutil.v1beta1.MsgConvertCosmosCoinToERC20Response)
-    - [MsgConvertERC20ToCoin](#zgc.evmutil.v1beta1.MsgConvertERC20ToCoin)
-    - [MsgConvertERC20ToCoinResponse](#zgc.evmutil.v1beta1.MsgConvertERC20ToCoinResponse)
+- [kava/community/v1beta1/query.proto](#kava/community/v1beta1/query.proto)
+    - [QueryAnnualizedRewardsRequest](#kava.community.v1beta1.QueryAnnualizedRewardsRequest)
+    - [QueryAnnualizedRewardsResponse](#kava.community.v1beta1.QueryAnnualizedRewardsResponse)
+    - [QueryBalanceRequest](#kava.community.v1beta1.QueryBalanceRequest)
+    - [QueryBalanceResponse](#kava.community.v1beta1.QueryBalanceResponse)
+    - [QueryParamsRequest](#kava.community.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.community.v1beta1.QueryParamsResponse)
+    - [QueryTotalBalanceRequest](#kava.community.v1beta1.QueryTotalBalanceRequest)
+    - [QueryTotalBalanceResponse](#kava.community.v1beta1.QueryTotalBalanceResponse)
   
-    - [Msg](#zgc.evmutil.v1beta1.Msg)
+    - [Query](#kava.community.v1beta1.Query)
   
-- [zgc/issuance/v1beta1/genesis.proto](#zgc/issuance/v1beta1/genesis.proto)
-    - [Asset](#zgc.issuance.v1beta1.Asset)
-    - [AssetSupply](#zgc.issuance.v1beta1.AssetSupply)
-    - [GenesisState](#zgc.issuance.v1beta1.GenesisState)
-    - [Params](#zgc.issuance.v1beta1.Params)
-    - [RateLimit](#zgc.issuance.v1beta1.RateLimit)
+- [kava/community/v1beta1/tx.proto](#kava/community/v1beta1/tx.proto)
+    - [MsgFundCommunityPool](#kava.community.v1beta1.MsgFundCommunityPool)
+    - [MsgFundCommunityPoolResponse](#kava.community.v1beta1.MsgFundCommunityPoolResponse)
+    - [MsgUpdateParams](#kava.community.v1beta1.MsgUpdateParams)
+    - [MsgUpdateParamsResponse](#kava.community.v1beta1.MsgUpdateParamsResponse)
   
-- [zgc/issuance/v1beta1/query.proto](#zgc/issuance/v1beta1/query.proto)
-    - [QueryParamsRequest](#zgc.issuance.v1beta1.QueryParamsRequest)
-    - [QueryParamsResponse](#zgc.issuance.v1beta1.QueryParamsResponse)
+    - [Msg](#kava.community.v1beta1.Msg)
   
-    - [Query](#zgc.issuance.v1beta1.Query)
+- [kava/earn/v1beta1/strategy.proto](#kava/earn/v1beta1/strategy.proto)
+    - [StrategyType](#kava.earn.v1beta1.StrategyType)
   
-- [zgc/issuance/v1beta1/tx.proto](#zgc/issuance/v1beta1/tx.proto)
-    - [MsgBlockAddress](#zgc.issuance.v1beta1.MsgBlockAddress)
-    - [MsgBlockAddressResponse](#zgc.issuance.v1beta1.MsgBlockAddressResponse)
-    - [MsgIssueTokens](#zgc.issuance.v1beta1.MsgIssueTokens)
-    - [MsgIssueTokensResponse](#zgc.issuance.v1beta1.MsgIssueTokensResponse)
-    - [MsgRedeemTokens](#zgc.issuance.v1beta1.MsgRedeemTokens)
-    - [MsgRedeemTokensResponse](#zgc.issuance.v1beta1.MsgRedeemTokensResponse)
-    - [MsgSetPauseStatus](#zgc.issuance.v1beta1.MsgSetPauseStatus)
-    - [MsgSetPauseStatusResponse](#zgc.issuance.v1beta1.MsgSetPauseStatusResponse)
-    - [MsgUnblockAddress](#zgc.issuance.v1beta1.MsgUnblockAddress)
-    - [MsgUnblockAddressResponse](#zgc.issuance.v1beta1.MsgUnblockAddressResponse)
+- [kava/earn/v1beta1/vault.proto](#kava/earn/v1beta1/vault.proto)
+    - [AllowedVault](#kava.earn.v1beta1.AllowedVault)
+    - [VaultRecord](#kava.earn.v1beta1.VaultRecord)
+    - [VaultShare](#kava.earn.v1beta1.VaultShare)
+    - [VaultShareRecord](#kava.earn.v1beta1.VaultShareRecord)
   
-    - [Msg](#zgc.issuance.v1beta1.Msg)
+- [kava/earn/v1beta1/params.proto](#kava/earn/v1beta1/params.proto)
+    - [Params](#kava.earn.v1beta1.Params)
   
-- [zgc/pricefeed/v1beta1/store.proto](#zgc/pricefeed/v1beta1/store.proto)
-    - [CurrentPrice](#zgc.pricefeed.v1beta1.CurrentPrice)
-    - [Market](#zgc.pricefeed.v1beta1.Market)
-    - [Params](#zgc.pricefeed.v1beta1.Params)
-    - [PostedPrice](#zgc.pricefeed.v1beta1.PostedPrice)
+- [kava/earn/v1beta1/genesis.proto](#kava/earn/v1beta1/genesis.proto)
+    - [GenesisState](#kava.earn.v1beta1.GenesisState)
   
-- [zgc/pricefeed/v1beta1/genesis.proto](#zgc/pricefeed/v1beta1/genesis.proto)
-    - [GenesisState](#zgc.pricefeed.v1beta1.GenesisState)
+- [kava/earn/v1beta1/proposal.proto](#kava/earn/v1beta1/proposal.proto)
+    - [CommunityPoolDepositProposal](#kava.earn.v1beta1.CommunityPoolDepositProposal)
+    - [CommunityPoolDepositProposalJSON](#kava.earn.v1beta1.CommunityPoolDepositProposalJSON)
+    - [CommunityPoolWithdrawProposal](#kava.earn.v1beta1.CommunityPoolWithdrawProposal)
+    - [CommunityPoolWithdrawProposalJSON](#kava.earn.v1beta1.CommunityPoolWithdrawProposalJSON)
   
-- [zgc/pricefeed/v1beta1/query.proto](#zgc/pricefeed/v1beta1/query.proto)
-    - [CurrentPriceResponse](#zgc.pricefeed.v1beta1.CurrentPriceResponse)
-    - [MarketResponse](#zgc.pricefeed.v1beta1.MarketResponse)
-    - [PostedPriceResponse](#zgc.pricefeed.v1beta1.PostedPriceResponse)
-    - [QueryMarketsRequest](#zgc.pricefeed.v1beta1.QueryMarketsRequest)
-    - [QueryMarketsResponse](#zgc.pricefeed.v1beta1.QueryMarketsResponse)
-    - [QueryOraclesRequest](#zgc.pricefeed.v1beta1.QueryOraclesRequest)
-    - [QueryOraclesResponse](#zgc.pricefeed.v1beta1.QueryOraclesResponse)
-    - [QueryParamsRequest](#zgc.pricefeed.v1beta1.QueryParamsRequest)
-    - [QueryParamsResponse](#zgc.pricefeed.v1beta1.QueryParamsResponse)
-    - [QueryPriceRequest](#zgc.pricefeed.v1beta1.QueryPriceRequest)
-    - [QueryPriceResponse](#zgc.pricefeed.v1beta1.QueryPriceResponse)
-    - [QueryPricesRequest](#zgc.pricefeed.v1beta1.QueryPricesRequest)
-    - [QueryPricesResponse](#zgc.pricefeed.v1beta1.QueryPricesResponse)
-    - [QueryRawPricesRequest](#zgc.pricefeed.v1beta1.QueryRawPricesRequest)
-    - [QueryRawPricesResponse](#zgc.pricefeed.v1beta1.QueryRawPricesResponse)
+- [kava/earn/v1beta1/query.proto](#kava/earn/v1beta1/query.proto)
+    - [DepositResponse](#kava.earn.v1beta1.DepositResponse)
+    - [QueryDepositsRequest](#kava.earn.v1beta1.QueryDepositsRequest)
+    - [QueryDepositsResponse](#kava.earn.v1beta1.QueryDepositsResponse)
+    - [QueryParamsRequest](#kava.earn.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.earn.v1beta1.QueryParamsResponse)
+    - [QueryTotalSupplyRequest](#kava.earn.v1beta1.QueryTotalSupplyRequest)
+    - [QueryTotalSupplyResponse](#kava.earn.v1beta1.QueryTotalSupplyResponse)
+    - [QueryVaultRequest](#kava.earn.v1beta1.QueryVaultRequest)
+    - [QueryVaultResponse](#kava.earn.v1beta1.QueryVaultResponse)
+    - [QueryVaultsRequest](#kava.earn.v1beta1.QueryVaultsRequest)
+    - [QueryVaultsResponse](#kava.earn.v1beta1.QueryVaultsResponse)
+    - [VaultResponse](#kava.earn.v1beta1.VaultResponse)
   
-    - [Query](#zgc.pricefeed.v1beta1.Query)
+    - [Query](#kava.earn.v1beta1.Query)
   
-- [zgc/pricefeed/v1beta1/tx.proto](#zgc/pricefeed/v1beta1/tx.proto)
-    - [MsgPostPrice](#zgc.pricefeed.v1beta1.MsgPostPrice)
-    - [MsgPostPriceResponse](#zgc.pricefeed.v1beta1.MsgPostPriceResponse)
+- [kava/earn/v1beta1/tx.proto](#kava/earn/v1beta1/tx.proto)
+    - [MsgDeposit](#kava.earn.v1beta1.MsgDeposit)
+    - [MsgDepositResponse](#kava.earn.v1beta1.MsgDepositResponse)
+    - [MsgWithdraw](#kava.earn.v1beta1.MsgWithdraw)
+    - [MsgWithdrawResponse](#kava.earn.v1beta1.MsgWithdrawResponse)
   
-    - [Msg](#zgc.pricefeed.v1beta1.Msg)
+    - [Msg](#kava.earn.v1beta1.Msg)
+  
+- [kava/evmutil/v1beta1/conversion_pair.proto](#kava/evmutil/v1beta1/conversion_pair.proto)
+    - [AllowedCosmosCoinERC20Token](#kava.evmutil.v1beta1.AllowedCosmosCoinERC20Token)
+    - [ConversionPair](#kava.evmutil.v1beta1.ConversionPair)
+  
+- [kava/evmutil/v1beta1/genesis.proto](#kava/evmutil/v1beta1/genesis.proto)
+    - [Account](#kava.evmutil.v1beta1.Account)
+    - [GenesisState](#kava.evmutil.v1beta1.GenesisState)
+    - [Params](#kava.evmutil.v1beta1.Params)
+  
+- [kava/evmutil/v1beta1/query.proto](#kava/evmutil/v1beta1/query.proto)
+    - [DeployedCosmosCoinContract](#kava.evmutil.v1beta1.DeployedCosmosCoinContract)
+    - [QueryDeployedCosmosCoinContractsRequest](#kava.evmutil.v1beta1.QueryDeployedCosmosCoinContractsRequest)
+    - [QueryDeployedCosmosCoinContractsResponse](#kava.evmutil.v1beta1.QueryDeployedCosmosCoinContractsResponse)
+    - [QueryParamsRequest](#kava.evmutil.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.evmutil.v1beta1.QueryParamsResponse)
+  
+    - [Query](#kava.evmutil.v1beta1.Query)
+  
+- [kava/evmutil/v1beta1/tx.proto](#kava/evmutil/v1beta1/tx.proto)
+    - [MsgConvertCoinToERC20](#kava.evmutil.v1beta1.MsgConvertCoinToERC20)
+    - [MsgConvertCoinToERC20Response](#kava.evmutil.v1beta1.MsgConvertCoinToERC20Response)
+    - [MsgConvertCosmosCoinFromERC20](#kava.evmutil.v1beta1.MsgConvertCosmosCoinFromERC20)
+    - [MsgConvertCosmosCoinFromERC20Response](#kava.evmutil.v1beta1.MsgConvertCosmosCoinFromERC20Response)
+    - [MsgConvertCosmosCoinToERC20](#kava.evmutil.v1beta1.MsgConvertCosmosCoinToERC20)
+    - [MsgConvertCosmosCoinToERC20Response](#kava.evmutil.v1beta1.MsgConvertCosmosCoinToERC20Response)
+    - [MsgConvertERC20ToCoin](#kava.evmutil.v1beta1.MsgConvertERC20ToCoin)
+    - [MsgConvertERC20ToCoinResponse](#kava.evmutil.v1beta1.MsgConvertERC20ToCoinResponse)
+  
+    - [Msg](#kava.evmutil.v1beta1.Msg)
+  
+- [kava/hard/v1beta1/hard.proto](#kava/hard/v1beta1/hard.proto)
+    - [Borrow](#kava.hard.v1beta1.Borrow)
+    - [BorrowInterestFactor](#kava.hard.v1beta1.BorrowInterestFactor)
+    - [BorrowLimit](#kava.hard.v1beta1.BorrowLimit)
+    - [CoinsProto](#kava.hard.v1beta1.CoinsProto)
+    - [Deposit](#kava.hard.v1beta1.Deposit)
+    - [InterestRateModel](#kava.hard.v1beta1.InterestRateModel)
+    - [MoneyMarket](#kava.hard.v1beta1.MoneyMarket)
+    - [Params](#kava.hard.v1beta1.Params)
+    - [SupplyInterestFactor](#kava.hard.v1beta1.SupplyInterestFactor)
+  
+- [kava/hard/v1beta1/genesis.proto](#kava/hard/v1beta1/genesis.proto)
+    - [GenesisAccumulationTime](#kava.hard.v1beta1.GenesisAccumulationTime)
+    - [GenesisState](#kava.hard.v1beta1.GenesisState)
+  
+- [kava/hard/v1beta1/query.proto](#kava/hard/v1beta1/query.proto)
+    - [BorrowInterestFactorResponse](#kava.hard.v1beta1.BorrowInterestFactorResponse)
+    - [BorrowResponse](#kava.hard.v1beta1.BorrowResponse)
+    - [DepositResponse](#kava.hard.v1beta1.DepositResponse)
+    - [InterestFactor](#kava.hard.v1beta1.InterestFactor)
+    - [MoneyMarketInterestRate](#kava.hard.v1beta1.MoneyMarketInterestRate)
+    - [QueryAccountsRequest](#kava.hard.v1beta1.QueryAccountsRequest)
+    - [QueryAccountsResponse](#kava.hard.v1beta1.QueryAccountsResponse)
+    - [QueryBorrowsRequest](#kava.hard.v1beta1.QueryBorrowsRequest)
+    - [QueryBorrowsResponse](#kava.hard.v1beta1.QueryBorrowsResponse)
+    - [QueryDepositsRequest](#kava.hard.v1beta1.QueryDepositsRequest)
+    - [QueryDepositsResponse](#kava.hard.v1beta1.QueryDepositsResponse)
+    - [QueryInterestFactorsRequest](#kava.hard.v1beta1.QueryInterestFactorsRequest)
+    - [QueryInterestFactorsResponse](#kava.hard.v1beta1.QueryInterestFactorsResponse)
+    - [QueryInterestRateRequest](#kava.hard.v1beta1.QueryInterestRateRequest)
+    - [QueryInterestRateResponse](#kava.hard.v1beta1.QueryInterestRateResponse)
+    - [QueryParamsRequest](#kava.hard.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.hard.v1beta1.QueryParamsResponse)
+    - [QueryReservesRequest](#kava.hard.v1beta1.QueryReservesRequest)
+    - [QueryReservesResponse](#kava.hard.v1beta1.QueryReservesResponse)
+    - [QueryTotalBorrowedRequest](#kava.hard.v1beta1.QueryTotalBorrowedRequest)
+    - [QueryTotalBorrowedResponse](#kava.hard.v1beta1.QueryTotalBorrowedResponse)
+    - [QueryTotalDepositedRequest](#kava.hard.v1beta1.QueryTotalDepositedRequest)
+    - [QueryTotalDepositedResponse](#kava.hard.v1beta1.QueryTotalDepositedResponse)
+    - [QueryUnsyncedBorrowsRequest](#kava.hard.v1beta1.QueryUnsyncedBorrowsRequest)
+    - [QueryUnsyncedBorrowsResponse](#kava.hard.v1beta1.QueryUnsyncedBorrowsResponse)
+    - [QueryUnsyncedDepositsRequest](#kava.hard.v1beta1.QueryUnsyncedDepositsRequest)
+    - [QueryUnsyncedDepositsResponse](#kava.hard.v1beta1.QueryUnsyncedDepositsResponse)
+    - [SupplyInterestFactorResponse](#kava.hard.v1beta1.SupplyInterestFactorResponse)
+  
+    - [Query](#kava.hard.v1beta1.Query)
+  
+- [kava/hard/v1beta1/tx.proto](#kava/hard/v1beta1/tx.proto)
+    - [MsgBorrow](#kava.hard.v1beta1.MsgBorrow)
+    - [MsgBorrowResponse](#kava.hard.v1beta1.MsgBorrowResponse)
+    - [MsgDeposit](#kava.hard.v1beta1.MsgDeposit)
+    - [MsgDepositResponse](#kava.hard.v1beta1.MsgDepositResponse)
+    - [MsgLiquidate](#kava.hard.v1beta1.MsgLiquidate)
+    - [MsgLiquidateResponse](#kava.hard.v1beta1.MsgLiquidateResponse)
+    - [MsgRepay](#kava.hard.v1beta1.MsgRepay)
+    - [MsgRepayResponse](#kava.hard.v1beta1.MsgRepayResponse)
+    - [MsgWithdraw](#kava.hard.v1beta1.MsgWithdraw)
+    - [MsgWithdrawResponse](#kava.hard.v1beta1.MsgWithdrawResponse)
+  
+    - [Msg](#kava.hard.v1beta1.Msg)
+  
+- [kava/incentive/v1beta1/apy.proto](#kava/incentive/v1beta1/apy.proto)
+    - [Apy](#kava.incentive.v1beta1.Apy)
+  
+- [kava/incentive/v1beta1/claims.proto](#kava/incentive/v1beta1/claims.proto)
+    - [BaseClaim](#kava.incentive.v1beta1.BaseClaim)
+    - [BaseMultiClaim](#kava.incentive.v1beta1.BaseMultiClaim)
+    - [DelegatorClaim](#kava.incentive.v1beta1.DelegatorClaim)
+    - [EarnClaim](#kava.incentive.v1beta1.EarnClaim)
+    - [HardLiquidityProviderClaim](#kava.incentive.v1beta1.HardLiquidityProviderClaim)
+    - [MultiRewardIndex](#kava.incentive.v1beta1.MultiRewardIndex)
+    - [MultiRewardIndexesProto](#kava.incentive.v1beta1.MultiRewardIndexesProto)
+    - [RewardIndex](#kava.incentive.v1beta1.RewardIndex)
+    - [RewardIndexesProto](#kava.incentive.v1beta1.RewardIndexesProto)
+    - [SavingsClaim](#kava.incentive.v1beta1.SavingsClaim)
+    - [SwapClaim](#kava.incentive.v1beta1.SwapClaim)
+    - [USDXMintingClaim](#kava.incentive.v1beta1.USDXMintingClaim)
+  
+- [kava/incentive/v1beta1/params.proto](#kava/incentive/v1beta1/params.proto)
+    - [MultiRewardPeriod](#kava.incentive.v1beta1.MultiRewardPeriod)
+    - [Multiplier](#kava.incentive.v1beta1.Multiplier)
+    - [MultipliersPerDenom](#kava.incentive.v1beta1.MultipliersPerDenom)
+    - [Params](#kava.incentive.v1beta1.Params)
+    - [RewardPeriod](#kava.incentive.v1beta1.RewardPeriod)
+  
+- [kava/incentive/v1beta1/genesis.proto](#kava/incentive/v1beta1/genesis.proto)
+    - [AccumulationTime](#kava.incentive.v1beta1.AccumulationTime)
+    - [GenesisRewardState](#kava.incentive.v1beta1.GenesisRewardState)
+    - [GenesisState](#kava.incentive.v1beta1.GenesisState)
+  
+- [kava/incentive/v1beta1/query.proto](#kava/incentive/v1beta1/query.proto)
+    - [QueryApyRequest](#kava.incentive.v1beta1.QueryApyRequest)
+    - [QueryApyResponse](#kava.incentive.v1beta1.QueryApyResponse)
+    - [QueryParamsRequest](#kava.incentive.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.incentive.v1beta1.QueryParamsResponse)
+    - [QueryRewardFactorsRequest](#kava.incentive.v1beta1.QueryRewardFactorsRequest)
+    - [QueryRewardFactorsResponse](#kava.incentive.v1beta1.QueryRewardFactorsResponse)
+    - [QueryRewardsRequest](#kava.incentive.v1beta1.QueryRewardsRequest)
+    - [QueryRewardsResponse](#kava.incentive.v1beta1.QueryRewardsResponse)
+  
+    - [Query](#kava.incentive.v1beta1.Query)
+  
+- [kava/incentive/v1beta1/tx.proto](#kava/incentive/v1beta1/tx.proto)
+    - [MsgClaimDelegatorReward](#kava.incentive.v1beta1.MsgClaimDelegatorReward)
+    - [MsgClaimDelegatorRewardResponse](#kava.incentive.v1beta1.MsgClaimDelegatorRewardResponse)
+    - [MsgClaimEarnReward](#kava.incentive.v1beta1.MsgClaimEarnReward)
+    - [MsgClaimEarnRewardResponse](#kava.incentive.v1beta1.MsgClaimEarnRewardResponse)
+    - [MsgClaimHardReward](#kava.incentive.v1beta1.MsgClaimHardReward)
+    - [MsgClaimHardRewardResponse](#kava.incentive.v1beta1.MsgClaimHardRewardResponse)
+    - [MsgClaimSavingsReward](#kava.incentive.v1beta1.MsgClaimSavingsReward)
+    - [MsgClaimSavingsRewardResponse](#kava.incentive.v1beta1.MsgClaimSavingsRewardResponse)
+    - [MsgClaimSwapReward](#kava.incentive.v1beta1.MsgClaimSwapReward)
+    - [MsgClaimSwapRewardResponse](#kava.incentive.v1beta1.MsgClaimSwapRewardResponse)
+    - [MsgClaimUSDXMintingReward](#kava.incentive.v1beta1.MsgClaimUSDXMintingReward)
+    - [MsgClaimUSDXMintingRewardResponse](#kava.incentive.v1beta1.MsgClaimUSDXMintingRewardResponse)
+    - [Selection](#kava.incentive.v1beta1.Selection)
+  
+    - [Msg](#kava.incentive.v1beta1.Msg)
+  
+- [kava/issuance/v1beta1/genesis.proto](#kava/issuance/v1beta1/genesis.proto)
+    - [Asset](#kava.issuance.v1beta1.Asset)
+    - [AssetSupply](#kava.issuance.v1beta1.AssetSupply)
+    - [GenesisState](#kava.issuance.v1beta1.GenesisState)
+    - [Params](#kava.issuance.v1beta1.Params)
+    - [RateLimit](#kava.issuance.v1beta1.RateLimit)
+  
+- [kava/issuance/v1beta1/query.proto](#kava/issuance/v1beta1/query.proto)
+    - [QueryParamsRequest](#kava.issuance.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.issuance.v1beta1.QueryParamsResponse)
+  
+    - [Query](#kava.issuance.v1beta1.Query)
+  
+- [kava/issuance/v1beta1/tx.proto](#kava/issuance/v1beta1/tx.proto)
+    - [MsgBlockAddress](#kava.issuance.v1beta1.MsgBlockAddress)
+    - [MsgBlockAddressResponse](#kava.issuance.v1beta1.MsgBlockAddressResponse)
+    - [MsgIssueTokens](#kava.issuance.v1beta1.MsgIssueTokens)
+    - [MsgIssueTokensResponse](#kava.issuance.v1beta1.MsgIssueTokensResponse)
+    - [MsgRedeemTokens](#kava.issuance.v1beta1.MsgRedeemTokens)
+    - [MsgRedeemTokensResponse](#kava.issuance.v1beta1.MsgRedeemTokensResponse)
+    - [MsgSetPauseStatus](#kava.issuance.v1beta1.MsgSetPauseStatus)
+    - [MsgSetPauseStatusResponse](#kava.issuance.v1beta1.MsgSetPauseStatusResponse)
+    - [MsgUnblockAddress](#kava.issuance.v1beta1.MsgUnblockAddress)
+    - [MsgUnblockAddressResponse](#kava.issuance.v1beta1.MsgUnblockAddressResponse)
+  
+    - [Msg](#kava.issuance.v1beta1.Msg)
+  
+- [kava/kavadist/v1beta1/params.proto](#kava/kavadist/v1beta1/params.proto)
+    - [CoreReward](#kava.kavadist.v1beta1.CoreReward)
+    - [InfrastructureParams](#kava.kavadist.v1beta1.InfrastructureParams)
+    - [Params](#kava.kavadist.v1beta1.Params)
+    - [PartnerReward](#kava.kavadist.v1beta1.PartnerReward)
+    - [Period](#kava.kavadist.v1beta1.Period)
+  
+- [kava/kavadist/v1beta1/genesis.proto](#kava/kavadist/v1beta1/genesis.proto)
+    - [GenesisState](#kava.kavadist.v1beta1.GenesisState)
+  
+- [kava/kavadist/v1beta1/proposal.proto](#kava/kavadist/v1beta1/proposal.proto)
+    - [CommunityPoolMultiSpendProposal](#kava.kavadist.v1beta1.CommunityPoolMultiSpendProposal)
+    - [CommunityPoolMultiSpendProposalJSON](#kava.kavadist.v1beta1.CommunityPoolMultiSpendProposalJSON)
+    - [MultiSpendRecipient](#kava.kavadist.v1beta1.MultiSpendRecipient)
+  
+- [kava/kavadist/v1beta1/query.proto](#kava/kavadist/v1beta1/query.proto)
+    - [QueryBalanceRequest](#kava.kavadist.v1beta1.QueryBalanceRequest)
+    - [QueryBalanceResponse](#kava.kavadist.v1beta1.QueryBalanceResponse)
+    - [QueryParamsRequest](#kava.kavadist.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.kavadist.v1beta1.QueryParamsResponse)
+  
+    - [Query](#kava.kavadist.v1beta1.Query)
+  
+- [kava/liquid/v1beta1/query.proto](#kava/liquid/v1beta1/query.proto)
+    - [QueryDelegatedBalanceRequest](#kava.liquid.v1beta1.QueryDelegatedBalanceRequest)
+    - [QueryDelegatedBalanceResponse](#kava.liquid.v1beta1.QueryDelegatedBalanceResponse)
+    - [QueryTotalSupplyRequest](#kava.liquid.v1beta1.QueryTotalSupplyRequest)
+    - [QueryTotalSupplyResponse](#kava.liquid.v1beta1.QueryTotalSupplyResponse)
+  
+    - [Query](#kava.liquid.v1beta1.Query)
+  
+- [kava/liquid/v1beta1/tx.proto](#kava/liquid/v1beta1/tx.proto)
+    - [MsgBurnDerivative](#kava.liquid.v1beta1.MsgBurnDerivative)
+    - [MsgBurnDerivativeResponse](#kava.liquid.v1beta1.MsgBurnDerivativeResponse)
+    - [MsgMintDerivative](#kava.liquid.v1beta1.MsgMintDerivative)
+    - [MsgMintDerivativeResponse](#kava.liquid.v1beta1.MsgMintDerivativeResponse)
+  
+    - [Msg](#kava.liquid.v1beta1.Msg)
+  
+- [kava/precisebank/v1/genesis.proto](#kava/precisebank/v1/genesis.proto)
+    - [FractionalBalance](#kava.precisebank.v1.FractionalBalance)
+    - [GenesisState](#kava.precisebank.v1.GenesisState)
+  
+- [kava/precisebank/v1/query.proto](#kava/precisebank/v1/query.proto)
+    - [QueryFractionalBalanceRequest](#kava.precisebank.v1.QueryFractionalBalanceRequest)
+    - [QueryFractionalBalanceResponse](#kava.precisebank.v1.QueryFractionalBalanceResponse)
+    - [QueryRemainderRequest](#kava.precisebank.v1.QueryRemainderRequest)
+    - [QueryRemainderResponse](#kava.precisebank.v1.QueryRemainderResponse)
+    - [QueryTotalFractionalBalancesRequest](#kava.precisebank.v1.QueryTotalFractionalBalancesRequest)
+    - [QueryTotalFractionalBalancesResponse](#kava.precisebank.v1.QueryTotalFractionalBalancesResponse)
+  
+    - [Query](#kava.precisebank.v1.Query)
+  
+- [kava/pricefeed/v1beta1/store.proto](#kava/pricefeed/v1beta1/store.proto)
+    - [CurrentPrice](#kava.pricefeed.v1beta1.CurrentPrice)
+    - [Market](#kava.pricefeed.v1beta1.Market)
+    - [Params](#kava.pricefeed.v1beta1.Params)
+    - [PostedPrice](#kava.pricefeed.v1beta1.PostedPrice)
+  
+- [kava/pricefeed/v1beta1/genesis.proto](#kava/pricefeed/v1beta1/genesis.proto)
+    - [GenesisState](#kava.pricefeed.v1beta1.GenesisState)
+  
+- [kava/pricefeed/v1beta1/query.proto](#kava/pricefeed/v1beta1/query.proto)
+    - [CurrentPriceResponse](#kava.pricefeed.v1beta1.CurrentPriceResponse)
+    - [MarketResponse](#kava.pricefeed.v1beta1.MarketResponse)
+    - [PostedPriceResponse](#kava.pricefeed.v1beta1.PostedPriceResponse)
+    - [QueryMarketsRequest](#kava.pricefeed.v1beta1.QueryMarketsRequest)
+    - [QueryMarketsResponse](#kava.pricefeed.v1beta1.QueryMarketsResponse)
+    - [QueryOraclesRequest](#kava.pricefeed.v1beta1.QueryOraclesRequest)
+    - [QueryOraclesResponse](#kava.pricefeed.v1beta1.QueryOraclesResponse)
+    - [QueryParamsRequest](#kava.pricefeed.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.pricefeed.v1beta1.QueryParamsResponse)
+    - [QueryPriceRequest](#kava.pricefeed.v1beta1.QueryPriceRequest)
+    - [QueryPriceResponse](#kava.pricefeed.v1beta1.QueryPriceResponse)
+    - [QueryPricesRequest](#kava.pricefeed.v1beta1.QueryPricesRequest)
+    - [QueryPricesResponse](#kava.pricefeed.v1beta1.QueryPricesResponse)
+    - [QueryRawPricesRequest](#kava.pricefeed.v1beta1.QueryRawPricesRequest)
+    - [QueryRawPricesResponse](#kava.pricefeed.v1beta1.QueryRawPricesResponse)
+  
+    - [Query](#kava.pricefeed.v1beta1.Query)
+  
+- [kava/pricefeed/v1beta1/tx.proto](#kava/pricefeed/v1beta1/tx.proto)
+    - [MsgPostPrice](#kava.pricefeed.v1beta1.MsgPostPrice)
+    - [MsgPostPriceResponse](#kava.pricefeed.v1beta1.MsgPostPriceResponse)
+  
+    - [Msg](#kava.pricefeed.v1beta1.Msg)
+  
+- [kava/router/v1beta1/tx.proto](#kava/router/v1beta1/tx.proto)
+    - [MsgDelegateMintDeposit](#kava.router.v1beta1.MsgDelegateMintDeposit)
+    - [MsgDelegateMintDepositResponse](#kava.router.v1beta1.MsgDelegateMintDepositResponse)
+    - [MsgMintDeposit](#kava.router.v1beta1.MsgMintDeposit)
+    - [MsgMintDepositResponse](#kava.router.v1beta1.MsgMintDepositResponse)
+    - [MsgWithdrawBurn](#kava.router.v1beta1.MsgWithdrawBurn)
+    - [MsgWithdrawBurnResponse](#kava.router.v1beta1.MsgWithdrawBurnResponse)
+    - [MsgWithdrawBurnUndelegate](#kava.router.v1beta1.MsgWithdrawBurnUndelegate)
+    - [MsgWithdrawBurnUndelegateResponse](#kava.router.v1beta1.MsgWithdrawBurnUndelegateResponse)
+  
+    - [Msg](#kava.router.v1beta1.Msg)
+  
+- [kava/savings/v1beta1/store.proto](#kava/savings/v1beta1/store.proto)
+    - [Deposit](#kava.savings.v1beta1.Deposit)
+    - [Params](#kava.savings.v1beta1.Params)
+  
+- [kava/savings/v1beta1/genesis.proto](#kava/savings/v1beta1/genesis.proto)
+    - [GenesisState](#kava.savings.v1beta1.GenesisState)
+  
+- [kava/savings/v1beta1/query.proto](#kava/savings/v1beta1/query.proto)
+    - [QueryDepositsRequest](#kava.savings.v1beta1.QueryDepositsRequest)
+    - [QueryDepositsResponse](#kava.savings.v1beta1.QueryDepositsResponse)
+    - [QueryParamsRequest](#kava.savings.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.savings.v1beta1.QueryParamsResponse)
+    - [QueryTotalSupplyRequest](#kava.savings.v1beta1.QueryTotalSupplyRequest)
+    - [QueryTotalSupplyResponse](#kava.savings.v1beta1.QueryTotalSupplyResponse)
+  
+    - [Query](#kava.savings.v1beta1.Query)
+  
+- [kava/savings/v1beta1/tx.proto](#kava/savings/v1beta1/tx.proto)
+    - [MsgDeposit](#kava.savings.v1beta1.MsgDeposit)
+    - [MsgDepositResponse](#kava.savings.v1beta1.MsgDepositResponse)
+    - [MsgWithdraw](#kava.savings.v1beta1.MsgWithdraw)
+    - [MsgWithdrawResponse](#kava.savings.v1beta1.MsgWithdrawResponse)
+  
+    - [Msg](#kava.savings.v1beta1.Msg)
+  
+- [kava/swap/v1beta1/swap.proto](#kava/swap/v1beta1/swap.proto)
+    - [AllowedPool](#kava.swap.v1beta1.AllowedPool)
+    - [Params](#kava.swap.v1beta1.Params)
+    - [PoolRecord](#kava.swap.v1beta1.PoolRecord)
+    - [ShareRecord](#kava.swap.v1beta1.ShareRecord)
+  
+- [kava/swap/v1beta1/genesis.proto](#kava/swap/v1beta1/genesis.proto)
+    - [GenesisState](#kava.swap.v1beta1.GenesisState)
+  
+- [kava/swap/v1beta1/query.proto](#kava/swap/v1beta1/query.proto)
+    - [DepositResponse](#kava.swap.v1beta1.DepositResponse)
+    - [PoolResponse](#kava.swap.v1beta1.PoolResponse)
+    - [QueryDepositsRequest](#kava.swap.v1beta1.QueryDepositsRequest)
+    - [QueryDepositsResponse](#kava.swap.v1beta1.QueryDepositsResponse)
+    - [QueryParamsRequest](#kava.swap.v1beta1.QueryParamsRequest)
+    - [QueryParamsResponse](#kava.swap.v1beta1.QueryParamsResponse)
+    - [QueryPoolsRequest](#kava.swap.v1beta1.QueryPoolsRequest)
+    - [QueryPoolsResponse](#kava.swap.v1beta1.QueryPoolsResponse)
+  
+    - [Query](#kava.swap.v1beta1.Query)
+  
+- [kava/swap/v1beta1/tx.proto](#kava/swap/v1beta1/tx.proto)
+    - [MsgDeposit](#kava.swap.v1beta1.MsgDeposit)
+    - [MsgDepositResponse](#kava.swap.v1beta1.MsgDepositResponse)
+    - [MsgSwapExactForTokens](#kava.swap.v1beta1.MsgSwapExactForTokens)
+    - [MsgSwapExactForTokensResponse](#kava.swap.v1beta1.MsgSwapExactForTokensResponse)
+    - [MsgSwapForExactTokens](#kava.swap.v1beta1.MsgSwapForExactTokens)
+    - [MsgSwapForExactTokensResponse](#kava.swap.v1beta1.MsgSwapForExactTokensResponse)
+    - [MsgWithdraw](#kava.swap.v1beta1.MsgWithdraw)
+    - [MsgWithdrawResponse](#kava.swap.v1beta1.MsgWithdrawResponse)
+  
+    - [Msg](#kava.swap.v1beta1.Msg)
   
 - [kava/validatorvesting/v1beta1/query.proto](#kava/validatorvesting/v1beta1/query.proto)
     - [QueryCirculatingSupplyHARDRequest](#kava.validatorvesting.v1beta1.QueryCirculatingSupplyHARDRequest)
@@ -3656,7 +3995,615 @@ Msg defines the issuance Msg service.
 
 
 
-<a name="zgc.pricefeed.v1beta1.CurrentPrice"></a>
+<a name="kava.kavadist.v1beta1.CoreReward"></a>
+
+### CoreReward
+CoreReward defines the reward weights for core infrastructure providers.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `address` | [bytes](#bytes) |  |  |
+| `weight` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="kava.kavadist.v1beta1.InfrastructureParams"></a>
+
+### InfrastructureParams
+InfrastructureParams define the parameters for infrastructure rewards.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `infrastructure_periods` | [Period](#kava.kavadist.v1beta1.Period) | repeated |  |
+| `core_rewards` | [CoreReward](#kava.kavadist.v1beta1.CoreReward) | repeated |  |
+| `partner_rewards` | [PartnerReward](#kava.kavadist.v1beta1.PartnerReward) | repeated |  |
+
+
+
+
+
+
+<a name="kava.kavadist.v1beta1.Params"></a>
+
+### Params
+Params governance parameters for kavadist module
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `active` | [bool](#bool) |  |  |
+| `periods` | [Period](#kava.kavadist.v1beta1.Period) | repeated |  |
+| `infrastructure_params` | [InfrastructureParams](#kava.kavadist.v1beta1.InfrastructureParams) |  |  |
+
+
+
+
+
+
+<a name="kava.kavadist.v1beta1.PartnerReward"></a>
+
+### PartnerReward
+PartnerRewards defines the reward schedule for partner infrastructure providers.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `address` | [bytes](#bytes) |  |  |
+| `rewards_per_second` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  |  |
+
+
+
+
+
+
+<a name="kava.kavadist.v1beta1.Period"></a>
+
+### Period
+Period stores the specified start and end dates, and the inflation, expressed as a decimal
+representing the yearly APR of KAVA tokens that will be minted during that period
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `start` | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | example "2020-03-01T15:20:00Z" |
+| `end` | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | example "2020-06-01T15:20:00Z" |
+| `inflation` | [bytes](#bytes) |  | example "1.000000003022265980" - 10% inflation |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="kava/kavadist/v1beta1/genesis.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## kava/kavadist/v1beta1/genesis.proto
+
+
+
+<a name="kava.kavadist.v1beta1.GenesisState"></a>
+
+### GenesisState
+GenesisState defines the kavadist module's genesis state.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `params` | [Params](#kava.kavadist.v1beta1.Params) |  |  |
+| `previous_block_time` | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="kava/kavadist/v1beta1/proposal.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## kava/kavadist/v1beta1/proposal.proto
+
+
+
+<a name="kava.kavadist.v1beta1.CommunityPoolMultiSpendProposal"></a>
+
+### CommunityPoolMultiSpendProposal
+CommunityPoolMultiSpendProposal spends from the community pool by sending to one or more
+addresses
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `title` | [string](#string) |  |  |
+| `description` | [string](#string) |  |  |
+| `recipient_list` | [MultiSpendRecipient](#kava.kavadist.v1beta1.MultiSpendRecipient) | repeated |  |
+
+
+
+
+
+
+<a name="kava.kavadist.v1beta1.CommunityPoolMultiSpendProposalJSON"></a>
+
+### CommunityPoolMultiSpendProposalJSON
+CommunityPoolMultiSpendProposalJSON defines a CommunityPoolMultiSpendProposal with a deposit
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `title` | [string](#string) |  |  |
+| `description` | [string](#string) |  |  |
+| `recipient_list` | [MultiSpendRecipient](#kava.kavadist.v1beta1.MultiSpendRecipient) | repeated |  |
+| `deposit` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated |  |
+
+
+
+
+
+
+<a name="kava.kavadist.v1beta1.MultiSpendRecipient"></a>
+
+### MultiSpendRecipient
+MultiSpendRecipient defines a recipient and the amount of coins they are receiving
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `address` | [string](#string) |  |  |
+| `amount` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="kava/kavadist/v1beta1/query.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## kava/kavadist/v1beta1/query.proto
+
+
+
+<a name="kava.kavadist.v1beta1.QueryBalanceRequest"></a>
+
+### QueryBalanceRequest
+QueryBalanceRequest defines the request type for querying x/kavadist balance.
+
+
+
+
+
+
+<a name="kava.kavadist.v1beta1.QueryBalanceResponse"></a>
+
+### QueryBalanceResponse
+QueryBalanceResponse defines the response type for querying x/kavadist balance.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `coins` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated |  |
+
+
+
+
+
+
+<a name="kava.kavadist.v1beta1.QueryParamsRequest"></a>
+
+### QueryParamsRequest
+QueryParamsRequest defines the request type for querying x/kavadist parameters.
+
+
+
+
+
+
+<a name="kava.kavadist.v1beta1.QueryParamsResponse"></a>
+
+### QueryParamsResponse
+QueryParamsResponse defines the response type for querying x/kavadist parameters.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `params` | [Params](#kava.kavadist.v1beta1.Params) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="kava.kavadist.v1beta1.Query"></a>
+
+### Query
+Query defines the gRPC querier service.
+
+| Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
+| ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `Params` | [QueryParamsRequest](#kava.kavadist.v1beta1.QueryParamsRequest) | [QueryParamsResponse](#kava.kavadist.v1beta1.QueryParamsResponse) | Params queries the parameters of x/kavadist module. | GET|/kava/kavadist/v1beta1/parameters|
+| `Balance` | [QueryBalanceRequest](#kava.kavadist.v1beta1.QueryBalanceRequest) | [QueryBalanceResponse](#kava.kavadist.v1beta1.QueryBalanceResponse) | Balance queries the balance of all coins of x/kavadist module. | GET|/kava/kavadist/v1beta1/balance|
+
+ <!-- end services -->
+
+
+
+<a name="kava/liquid/v1beta1/query.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## kava/liquid/v1beta1/query.proto
+
+
+
+<a name="kava.liquid.v1beta1.QueryDelegatedBalanceRequest"></a>
+
+### QueryDelegatedBalanceRequest
+QueryDelegatedBalanceRequest defines the request type for Query/DelegatedBalance method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `delegator` | [string](#string) |  | delegator is the address of the account to query |
+
+
+
+
+
+
+<a name="kava.liquid.v1beta1.QueryDelegatedBalanceResponse"></a>
+
+### QueryDelegatedBalanceResponse
+DelegatedBalanceResponse defines the response type for the Query/DelegatedBalance method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `vested` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  | vested is the amount of all delegated coins that have vested (ie not locked) |
+| `vesting` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  | vesting is the amount of all delegated coins that are still vesting (ie locked) |
+
+
+
+
+
+
+<a name="kava.liquid.v1beta1.QueryTotalSupplyRequest"></a>
+
+### QueryTotalSupplyRequest
+QueryTotalSupplyRequest defines the request type for Query/TotalSupply method.
+
+
+
+
+
+
+<a name="kava.liquid.v1beta1.QueryTotalSupplyResponse"></a>
+
+### QueryTotalSupplyResponse
+TotalSupplyResponse defines the response type for the Query/TotalSupply method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `height` | [int64](#int64) |  | Height is the block height at which these totals apply |
+| `result` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated | Result is a list of coins supplied to liquid |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="kava.liquid.v1beta1.Query"></a>
+
+### Query
+Query defines the gRPC querier service for liquid module
+
+| Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
+| ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `DelegatedBalance` | [QueryDelegatedBalanceRequest](#kava.liquid.v1beta1.QueryDelegatedBalanceRequest) | [QueryDelegatedBalanceResponse](#kava.liquid.v1beta1.QueryDelegatedBalanceResponse) | DelegatedBalance returns an account's vesting and vested coins currently delegated to validators. It ignores coins in unbonding delegations. | GET|/kava/liquid/v1beta1/delegated_balance/{delegator}|
+| `TotalSupply` | [QueryTotalSupplyRequest](#kava.liquid.v1beta1.QueryTotalSupplyRequest) | [QueryTotalSupplyResponse](#kava.liquid.v1beta1.QueryTotalSupplyResponse) | TotalSupply returns the total sum of all coins currently locked into the liquid module. | GET|/kava/liquid/v1beta1/total_supply|
+
+ <!-- end services -->
+
+
+
+<a name="kava/liquid/v1beta1/tx.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## kava/liquid/v1beta1/tx.proto
+
+
+
+<a name="kava.liquid.v1beta1.MsgBurnDerivative"></a>
+
+### MsgBurnDerivative
+MsgBurnDerivative defines the Msg/BurnDerivative request type.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `sender` | [string](#string) |  | sender is the owner of the derivatives to be converted |
+| `validator` | [string](#string) |  | validator is the validator of the derivatives to be converted |
+| `amount` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  | amount is the quantity of derivatives to be converted |
+
+
+
+
+
+
+<a name="kava.liquid.v1beta1.MsgBurnDerivativeResponse"></a>
+
+### MsgBurnDerivativeResponse
+MsgBurnDerivativeResponse defines the Msg/BurnDerivative response type.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `received` | [string](#string) |  | received is the number of delegation shares sent to the sender |
+
+
+
+
+
+
+<a name="kava.liquid.v1beta1.MsgMintDerivative"></a>
+
+### MsgMintDerivative
+MsgMintDerivative defines the Msg/MintDerivative request type.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `sender` | [string](#string) |  | sender is the owner of the delegation to be converted |
+| `validator` | [string](#string) |  | validator is the validator of the delegation to be converted |
+| `amount` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  | amount is the quantity of staked assets to be converted |
+
+
+
+
+
+
+<a name="kava.liquid.v1beta1.MsgMintDerivativeResponse"></a>
+
+### MsgMintDerivativeResponse
+MsgMintDerivativeResponse defines the Msg/MintDerivative response type.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `received` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  | received is the amount of staking derivative minted and sent to the sender |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="kava.liquid.v1beta1.Msg"></a>
+
+### Msg
+Msg defines the liquid Msg service.
+
+| Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
+| ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `MintDerivative` | [MsgMintDerivative](#kava.liquid.v1beta1.MsgMintDerivative) | [MsgMintDerivativeResponse](#kava.liquid.v1beta1.MsgMintDerivativeResponse) | MintDerivative defines a method for converting a delegation into staking deriviatives. | |
+| `BurnDerivative` | [MsgBurnDerivative](#kava.liquid.v1beta1.MsgBurnDerivative) | [MsgBurnDerivativeResponse](#kava.liquid.v1beta1.MsgBurnDerivativeResponse) | BurnDerivative defines a method for converting staking deriviatives into a delegation. | |
+
+ <!-- end services -->
+
+
+
+<a name="kava/precisebank/v1/genesis.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## kava/precisebank/v1/genesis.proto
+
+
+
+<a name="kava.precisebank.v1.FractionalBalance"></a>
+
+### FractionalBalance
+FractionalBalance defines the fractional portion of an account balance
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `address` | [string](#string) |  | address is the address of the balance holder. |
+| `amount` | [string](#string) |  | amount indicates amount of only the fractional balance owned by the address. FractionalBalance currently only supports tracking 1 single asset, e.g. fractional balances of ukava. |
+
+
+
+
+
+
+<a name="kava.precisebank.v1.GenesisState"></a>
+
+### GenesisState
+GenesisState defines the precisebank module's genesis state.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `balances` | [FractionalBalance](#kava.precisebank.v1.FractionalBalance) | repeated | balances is a list of all the balances in the precisebank module. |
+| `remainder` | [string](#string) |  | remainder is an internal value of how much extra fractional digits are still backed by the reserve, but not assigned to any account. |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="kava/precisebank/v1/query.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## kava/precisebank/v1/query.proto
+
+
+
+<a name="kava.precisebank.v1.QueryFractionalBalanceRequest"></a>
+
+### QueryFractionalBalanceRequest
+QueryFractionalBalanceRequest defines the request type for Query/FractionalBalance method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `address` | [string](#string) |  | address is the account address to query fractional balance for. |
+
+
+
+
+
+
+<a name="kava.precisebank.v1.QueryFractionalBalanceResponse"></a>
+
+### QueryFractionalBalanceResponse
+QueryFractionalBalanceResponse defines the response type for Query/FractionalBalance method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `fractional_balance` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  | fractional_balance is the fractional balance of the address. |
+
+
+
+
+
+
+<a name="kava.precisebank.v1.QueryRemainderRequest"></a>
+
+### QueryRemainderRequest
+QueryRemainderRequest defines the request type for Query/Remainder method.
+
+
+
+
+
+
+<a name="kava.precisebank.v1.QueryRemainderResponse"></a>
+
+### QueryRemainderResponse
+QueryRemainderResponse defines the response type for Query/Remainder method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `remainder` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  | remainder is the amount backed by the reserve, but not yet owned by any account, i.e. not in circulation. |
+
+
+
+
+
+
+<a name="kava.precisebank.v1.QueryTotalFractionalBalancesRequest"></a>
+
+### QueryTotalFractionalBalancesRequest
+QueryTotalFractionalBalancesRequest defines the request type for Query/TotalFractionalBalances method.
+
+
+
+
+
+
+<a name="kava.precisebank.v1.QueryTotalFractionalBalancesResponse"></a>
+
+### QueryTotalFractionalBalancesResponse
+QueryTotalFractionalBalancesResponse defines the response type for Query/TotalFractionalBalances method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `total` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  | total is the total sum of all fractional balances managed by the precisebank module. |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="kava.precisebank.v1.Query"></a>
+
+### Query
+Query defines the gRPC querier service for precisebank module
+
+| Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
+| ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `TotalFractionalBalances` | [QueryTotalFractionalBalancesRequest](#kava.precisebank.v1.QueryTotalFractionalBalancesRequest) | [QueryTotalFractionalBalancesResponse](#kava.precisebank.v1.QueryTotalFractionalBalancesResponse) | TotalFractionalBalances returns the total sum of all fractional balances managed by the precisebank module. | GET|/kava/precisebank/v1/total_fractional_balances|
+| `Remainder` | [QueryRemainderRequest](#kava.precisebank.v1.QueryRemainderRequest) | [QueryRemainderResponse](#kava.precisebank.v1.QueryRemainderResponse) | Remainder returns the amount backed by the reserve, but not yet owned by any account, i.e. not in circulation. | GET|/kava/precisebank/v1/remainder|
+| `FractionalBalance` | [QueryFractionalBalanceRequest](#kava.precisebank.v1.QueryFractionalBalanceRequest) | [QueryFractionalBalanceResponse](#kava.precisebank.v1.QueryFractionalBalanceResponse) | FractionalBalance returns only the fractional balance of an address. This does not include any integer balance. | GET|/kava/precisebank/v1/fractional_balance/{address}|
+
+ <!-- end services -->
+
+
+
+<a name="kava/pricefeed/v1beta1/store.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## kava/pricefeed/v1beta1/store.proto
+
+
+
+<a name="kava.pricefeed.v1beta1.CurrentPrice"></a>
 
 ### CurrentPrice
 CurrentPrice defines a current price for a particular market in the pricefeed

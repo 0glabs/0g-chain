@@ -105,6 +105,8 @@ include $(BUILD_DIR)/deps.mk
 include $(BUILD_DIR)/proto.mk
 include $(BUILD_DIR)/proto-deps.mk
 
+include $(BUILD_DIR)/lint.mk
+
 #export GO111MODULE = on
 # process build tags
 build_tags = netgo
@@ -208,6 +210,14 @@ build-release: go.sum
 build-linux: go.sum
 	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
 
+# build on rocksdb-backed kava on macOS with shared libs from brew
+# this assumes you are on macOS & these deps have been installed with brew:
+# rocksdb, snappy, lz4, and zstd
+# use like `make build-rocksdb-brew COSMOS_BUILD_OPTIONS=rocksdb`
+build-rocksdb-brew:
+	export CGO_CFLAGS := -I$(shell brew --prefix rocksdb)/include
+	export CGO_LDFLAGS := -L$(shell brew --prefix rocksdb)/lib -lrocksdb -lstdc++ -lm -lz -L$(shell brew --prefix snappy)/lib -L$(shell brew --prefix lz4)/lib -L$(shell brew --prefix zstd)/lib
+
 install: go.sum
 	$(GO_BIN) install -mod=readonly $(BUILD_FLAGS) $(MAIN_ENTRY)
 
@@ -234,13 +244,6 @@ link-check:
 	# TODO: replace kava in following line with project name
 	liche -r . --exclude "^http://127.*|^https://riot.im/app*|^http://kava-testnet*|^https://testnet-dex*|^https://kava3.data.kava.io*|^https://ipfs.io*|^https://apps.apple.com*|^https://kava.quicksync.io*"
 
-
-lint:
-	golangci-lint run
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" | xargs gofmt -d -s
-	$(GO_BIN) mod verify
-.PHONY: lint
-
 format:
 	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -name '*.pb.go' | xargs gofmt -w -s
 	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -name '*.pb.go' | xargs misspell -w
@@ -265,11 +268,11 @@ build-docker-local-0gchain:
 
 # Run a 4-node testnet locally
 localnet-start: build-linux localnet-stop
-	@if ! [ -f build/node0/kvd/config/genesis.json ]; then docker run --rm -v $(CURDIR)/build:/kvd:Z $(DOCKER_IMAGE_NAME)-node testnet --v 4 -o . --starting-ip-address 192.168.10.2 --keyring-backend=test ; fi
-	docker-compose up -d
+	@if ! [ -f build/node0/kvd/config/genesis.json ]; then docker run --rm -v $(CURDIR)/build:/kvd:Z kava/kavanode testnet --v 4 -o . --starting-ip-address 192.168.10.2 --keyring-backend=test ; fi
+	$(DOCKER) compose up -d
 
 localnet-stop:
-	docker-compose down
+	$(DOCKER) compose down
 
 # Launch a new single validator chain
 start:
@@ -311,11 +314,13 @@ test-basic: test
 test-e2e: docker-build
 	$(GO_BIN) test -failfast -count=1 -v ./tests/e2e/...
 
+# run interchaintest tests (./tests/e2e-ibc)
+test-ibc: docker-build
+	cd tests/e2e-ibc && KAVA_TAG=local $(GO_BIN) test -timeout 10m .
+.PHONY: test-ibc
+
 test:
 	@$(GO_BIN) test $$($(GO_BIN) list ./... | grep -v 'contrib' | grep -v 'tests/e2e')
-
-test-rocksdb:
-	@go test -tags=rocksdb $(MAIN_ENTRY)/opendb
 
 # Run cli integration tests
 # `-p 4` to use 4 cores, `-tags cli_test` to tell $(GO_BIN) not to ignore the cli package
@@ -327,6 +332,18 @@ test-cli: build
 test-migrate:
 	@$(GO_BIN) test -v -count=1 ./migrate/...
 
+# Use the old Apple linker to workaround broken xcode - https://github.com/golang/go/issues/65169
+ifeq ($(OS_FAMILY),Darwin)
+  FUZZLDFLAGS := -ldflags=-extldflags=-Wl,-ld_classic
+endif
+
+test-fuzz:
+	@$(GO_BIN) test $(FUZZLDFLAGS) -run NOTAREALTEST -v -fuzztime 10s -fuzz=FuzzMintCoins ./x/precisebank/keeper
+	@$(GO_BIN) test $(FUZZLDFLAGS) -run NOTAREALTEST -v -fuzztime 10s -fuzz=FuzzBurnCoins ./x/precisebank/keeper
+	@$(GO_BIN) test $(FUZZLDFLAGS) -run NOTAREALTEST -v -fuzztime 10s -fuzz=FuzzSendCoins ./x/precisebank/keeper
+	@$(GO_BIN) test $(FUZZLDFLAGS) -run NOTAREALTEST -v -fuzztime 10s -fuzz=FuzzGenesisStateValidate_NonZeroRemainder ./x/precisebank/types
+	@$(GO_BIN) test $(FUZZLDFLAGS) -run NOTAREALTEST -v -fuzztime 10s -fuzz=FuzzGenesisStateValidate_ZeroRemainder ./x/precisebank/types
+
 # Kick start lots of sims on an AWS cluster.
 # This submits an AWS Batch job to run a lot of sims, each within a docker image. Results are uploaded to S3
 start-remote-sims:
@@ -337,14 +354,14 @@ start-remote-sims:
 	# submit an array job on AWS Batch, using 1000 seeds, spot instances
 	aws batch submit-job \
 		-—job-name "master-$(VERSION)" \
-		-—job-queue “simulation-1-queue-spot" \
+		-—job-queue "simulation-1-queue-spot" \
 		-—array-properties size=1000 \
 		-—job-definition $(BINARY_NAME)-sim-master \
 		-—container-override environment=[{SIM_NAME=master-$(VERSION)}]
 
 update-kvtool:
 	git submodule init || true
-	git submodule update
+	git submodule update --remote
 	cd tests/e2e/kvtool && make install
 
-.PHONY: all build-linux install clean build test test-cli test-all test-rest test-basic start-remote-sims
+.PHONY: all build-linux install build test test-cli test-all test-rest test-basic test-fuzz start-remote-sims

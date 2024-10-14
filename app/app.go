@@ -95,6 +95,7 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
 	solomachine "github.com/cosmos/ibc-go/v7/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v7/modules/light-clients/07-tendermint"
+	"github.com/ethereum/go-ethereum/core/vm"
 	evmante "github.com/evmos/ethermint/app/ante"
 	ethermintconfig "github.com/evmos/ethermint/server/config"
 	"github.com/evmos/ethermint/x/evm"
@@ -129,6 +130,9 @@ import (
 	issuance "github.com/0glabs/0g-chain/x/issuance"
 	issuancekeeper "github.com/0glabs/0g-chain/x/issuance/keeper"
 	issuancetypes "github.com/0glabs/0g-chain/x/issuance/types"
+	"github.com/0glabs/0g-chain/x/precisebank"
+	precisebankkeeper "github.com/0glabs/0g-chain/x/precisebank/keeper"
+	precisebanktypes "github.com/0glabs/0g-chain/x/precisebank/types"
 	pricefeed "github.com/0glabs/0g-chain/x/pricefeed"
 	pricefeedkeeper "github.com/0glabs/0g-chain/x/pricefeed/keeper"
 	pricefeedtypes "github.com/0glabs/0g-chain/x/pricefeed/types"
@@ -136,7 +140,6 @@ import (
 	validatorvestingrest "github.com/0glabs/0g-chain/x/validator-vesting/client/rest"
 	validatorvestingtypes "github.com/0glabs/0g-chain/x/validator-vesting/types"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/vm"
 )
 
 var (
@@ -178,6 +181,7 @@ var (
 		validatorvesting.AppModuleBasic{},
 		evmutil.AppModuleBasic{},
 		mint.AppModuleBasic{},
+		precisebank.AppModuleBasic{},
 		council.AppModuleBasic{},
 		dasigners.AppModuleBasic{},
 		consensus.AppModuleBasic{},
@@ -199,6 +203,7 @@ var (
 		issuancetypes.ModuleAccountName: {authtypes.Minter, authtypes.Burner},
 		bep3types.ModuleName:            {authtypes.Burner, authtypes.Minter},
 		minttypes.ModuleName:            {authtypes.Minter},
+		precisebanktypes.ModuleName:     {authtypes.Minter, authtypes.Burner}, // used for reserve account to back fractional amounts
 	}
 )
 
@@ -268,6 +273,7 @@ type App struct {
 	mintKeeper            mintkeeper.Keeper
 	dasignersKeeper       dasignerskeeper.Keeper
 	consensusParamsKeeper consensusparamkeeper.Keeper
+	precisebankKeeper     precisebankkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -318,7 +324,7 @@ func NewApp(
 		counciltypes.StoreKey,
 		dasignerstypes.StoreKey,
 		vestingtypes.StoreKey,
-		consensusparamtypes.StoreKey, crisistypes.StoreKey,
+		consensusparamtypes.StoreKey, crisistypes.StoreKey, precisebanktypes.StoreKey,
 		ibcwasmtypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey, evmtypes.TransientKey, feemarkettypes.TransientKey)
@@ -482,7 +488,13 @@ func NewApp(
 		app.accountKeeper,
 	)
 
-	evmBankKeeper := evmutilkeeper.NewEvmBankKeeper(app.evmutilKeeper, app.bankKeeper, app.accountKeeper)
+	app.precisebankKeeper = precisebankkeeper.NewKeeper(
+		app.appCodec,
+		keys[precisebanktypes.StoreKey],
+		app.bankKeeper,
+		app.accountKeeper,
+	)
+
 	// dasigners keeper
 	app.dasignersKeeper = dasignerskeeper.NewKeeper(keys[dasignerstypes.StoreKey], appCodec, app.stakingKeeper, govAuthAddrStr)
 	// precopmiles
@@ -492,16 +504,18 @@ func NewApp(
 		panic("initialize precompile failed")
 	}
 	precompiles[daSignersPrecompile.Address()] = daSignersPrecompile
-	// evm keeper
+
 	app.evmKeeper = evmkeeper.NewKeeper(
 		appCodec, keys[evmtypes.StoreKey], tkeys[evmtypes.TransientKey],
 		govAuthAddr,
-		app.accountKeeper, evmBankKeeper, app.stakingKeeper, app.feeMarketKeeper,
+		app.accountKeeper,
+		app.precisebankKeeper, // x/precisebank in place of x/bank
+		app.stakingKeeper,
+		app.feeMarketKeeper,
 		options.EVMTrace,
 		evmSubspace,
 		precompiles,
 	)
-
 	app.evmutilKeeper.SetEvmKeeper(app.evmKeeper)
 
 	// It's important to note that the PFM Keeper must be initialized before the Transfer Keeper
@@ -669,6 +683,7 @@ func NewApp(
 		evmutil.NewAppModule(app.evmutilKeeper, app.bankKeeper, app.accountKeeper),
 		// nil InflationCalculationFn, use SDK's default inflation function
 		mint.NewAppModule(appCodec, app.mintKeeper, app.accountKeeper, nil, mintSubspace),
+		precisebank.NewAppModule(app.precisebankKeeper, app.bankKeeper, app.accountKeeper),
 		council.NewAppModule(app.CouncilKeeper),
 		ibcwasm.NewAppModule(app.ibcWasmClientKeeper),
 		dasigners.NewAppModule(app.dasignersKeeper, *app.stakingKeeper),
@@ -716,6 +731,7 @@ func NewApp(
 		counciltypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		packetforwardtypes.ModuleName,
+		precisebanktypes.ModuleName,
 		ibcwasmtypes.ModuleName,
 		dasignerstypes.ModuleName,
 	)
@@ -752,6 +768,7 @@ func NewApp(
 		counciltypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		packetforwardtypes.ModuleName,
+		precisebanktypes.ModuleName,
 		ibcwasmtypes.ModuleName,
 		dasignerstypes.ModuleName,
 	)
@@ -786,7 +803,8 @@ func NewApp(
 		counciltypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		packetforwardtypes.ModuleName,
-		crisistypes.ModuleName, // runs the invariants at genesis, should run after other modules
+		precisebanktypes.ModuleName, // Must be run after x/bank to verify reserve balance
+		crisistypes.ModuleName,      // runs the invariants at genesis, should run after other modules
 		ibcwasmtypes.ModuleName,
 		dasignerstypes.ModuleName,
 	)

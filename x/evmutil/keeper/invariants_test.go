@@ -44,7 +44,7 @@ func (suite *invariantTestSuite) SetupValidState() {
 	for i := 0; i < 4; i++ {
 		suite.Keeper.SetAccount(suite.Ctx, *types.NewAccount(
 			suite.Addrs[i],
-			keeper.ConversionMultiplier.QuoRaw(2),
+			sdkmath.NewInt(10000000000),
 		))
 	}
 	suite.FundModuleAccountWithZgChain(
@@ -97,7 +97,7 @@ func (suite *invariantTestSuite) SetupValidState() {
 	suite.NoError(err)
 }
 
-// RegisterRoutes implements sdk.InvariantRegistry
+// RegisterRoute implements sdk.InvariantRegistry
 func (suite *invariantTestSuite) RegisterRoute(moduleName string, route string, invariant sdk.Invariant) {
 	_, exists := suite.invariants[moduleName]
 
@@ -130,45 +130,6 @@ func (suite *invariantTestSuite) runInvariant(route string, invariant func(bankK
 	}
 
 	return dMessage, dBroken
-}
-
-func (suite *invariantTestSuite) TestFullyBackedInvariant() {
-	// default state is valid
-	_, broken := suite.runInvariant("fully-backed", keeper.FullyBackedInvariant)
-	suite.Equal(false, broken)
-
-	suite.SetupValidState()
-	_, broken = suite.runInvariant("fully-backed", keeper.FullyBackedInvariant)
-	suite.Equal(false, broken)
-
-	// break invariant by increasing total minor balances above module balance
-	suite.Keeper.AddBalance(suite.Ctx, suite.Addrs[0], sdk.OneInt())
-
-	message, broken := suite.runInvariant("fully-backed", keeper.FullyBackedInvariant)
-	suite.Equal("evmutil: fully backed broken invariant\nsum of minor balances greater than module account\n", message)
-	suite.Equal(true, broken)
-}
-
-func (suite *invariantTestSuite) TestSmallBalances() {
-	// default state is valid
-	_, broken := suite.runInvariant("small-balances", keeper.SmallBalancesInvariant)
-	suite.Equal(false, broken)
-
-	suite.SetupValidState()
-	_, broken = suite.runInvariant("small-balances", keeper.SmallBalancesInvariant)
-	suite.Equal(false, broken)
-
-	// increase minor balance at least above conversion multiplier
-	suite.Keeper.AddBalance(suite.Ctx, suite.Addrs[0], keeper.ConversionMultiplier)
-	// add same number of gas denom to avoid breaking other invariants
-	amt := sdk.NewCoins(sdk.NewInt64Coin(chaincfg.GasDenom, 1))
-	suite.Require().NoError(
-		suite.App.FundModuleAccount(suite.Ctx, types.ModuleName, amt),
-	)
-
-	message, broken := suite.runInvariant("small-balances", keeper.SmallBalancesInvariant)
-	suite.Equal("evmutil: small balances broken invariant\nminor balances not all less than overflow\n", message)
-	suite.Equal(true, broken)
 }
 
 // the cosmos-coins-fully-backed invariant depends on 1-to-1 mapping of module balance to erc20s

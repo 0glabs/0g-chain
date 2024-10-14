@@ -1,127 +1,102 @@
 package e2e_test
 
 import (
-	"time"
-
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	tmtypes "github.com/cometbft/cometbft/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	precisebanktypes "github.com/0glabs/0g-chain/x/precisebank/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
-func (suite *IntegrationTestSuite) TestUpgradeParams_SDK() {
+func (suite *IntegrationTestSuite) TestUpgrade_PreciseBankReserveTransfer() {
 	suite.SkipIfUpgradeDisabled()
 
-	beforeUpgradeCtx := suite.ZgChain.Grpc.CtxAtHeight(suite.UpgradeHeight - 1)
-	afterUpgradeCtx := suite.ZgChain.Grpc.CtxAtHeight(suite.UpgradeHeight)
+	// 	beforeUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight - 1)
+	// 	afterUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight)
 
-	// Before params
-	grpcClient := suite.ZgChain.Grpc
-	govParamsBefore, err := grpcClient.Query.Gov.Params(beforeUpgradeCtx, &govtypes.QueryParamsRequest{
-		ParamsType: govtypes.ParamDeposit,
+	// 	grpcClient := suite.Kava.Grpc
+
+	// -----------------------------
+	// Get initial reserve balances
+	evmutilAddr := "kava1w9vxuke5dz6hyza2j932qgmxltnfxwl78u920k"
+	precisebankAddr := "kava12yfe2jaupmtjruwxsec7hg7er60fhaa4uz7ffl"
+
+	previousEvmutilBalRes, err := grpcClient.Query.Bank.Balance(beforeUpgradeCtx, &banktypes.QueryBalanceRequest{
+		Address: evmutilAddr,
+		Denom:   precisebanktypes.IntegerCoinDenom,
 	})
-	suite.NoError(err)
-	govParamsAfter, err := grpcClient.Query.Gov.Params(afterUpgradeCtx, &govtypes.QueryParamsRequest{
-		ParamsType: govtypes.ParamDeposit,
+	suite.Require().NoError(err)
+	suite.Require().NotNil(previousEvmutilBalRes.Balance)
+	suite.Require().True(
+		previousEvmutilBalRes.Balance.Amount.IsPositive(),
+		"should have reserve balance before upgrade",
+	)
+
+	previousPrecisebankBalRes, err := grpcClient.Query.Bank.Balance(beforeUpgradeCtx, &banktypes.QueryBalanceRequest{
+		Address: precisebankAddr,
+		Denom:   precisebanktypes.IntegerCoinDenom,
 	})
-	suite.NoError(err)
+	suite.Require().NoError(err)
+	suite.Require().NotNil(previousPrecisebankBalRes.Balance)
+	suite.Require().True(
+		previousPrecisebankBalRes.Balance.Amount.IsZero(),
+		"should be empty before upgrade",
+	)
 
-	// after upgrade, querying params before upgrade height returns nil
-	// since the param gprc query no longer queries x/params
-	suite.Run("x/gov parameters before upgrade", func() {
-		suite.Assert().Nil(
-			govParamsBefore.DepositParams.MaxDepositPeriod,
-			"x/gov DepositParams max deposit period before upgrade should be nil",
-		)
-		suite.Assert().Nil(
-			govParamsBefore.DepositParams.MinDeposit,
-			"x/gov DepositParams min deposit before upgrade should be 10_000_000 ukava",
-		)
+	suite.T().Logf("x/evmutil balances before upgrade: %s", previousEvmutilBalRes.Balance)
+	suite.T().Logf("x/precisebank balances before upgrade: %s", previousPrecisebankBalRes.Balance)
+
+	// -----------------------------
+	// After upgrade
+	// - Check reserve balance transfer
+	// - Check reserve fully backs fractional amounts
+	afterEvmutilBalRes, err := grpcClient.Query.Bank.Balance(afterUpgradeCtx, &banktypes.QueryBalanceRequest{
+		Address: evmutilAddr,
+		Denom:   precisebanktypes.IntegerCoinDenom,
 	})
+	suite.Require().NoError(err)
+	suite.Require().NotNil(afterEvmutilBalRes.Balance)
+	suite.Require().Truef(
+		afterEvmutilBalRes.Balance.Amount.IsZero(),
+		"should have transferred all reserve balance to precisebank, expected 0 but got %s",
+		afterEvmutilBalRes.Balance,
+	)
 
-	suite.Run("x/gov parameters after upgrade", func() {
-		suite.Assert().Equal(
-			mustParseDuration("172800s"),
-			govParamsAfter.DepositParams.MaxDepositPeriod,
-			"x/gov DepositParams max deposit period after upgrade should be 172800s",
-		)
-		suite.Assert().Equal(
-			[]sdk.Coin{{Denom: "ua0gi", Amount: sdk.NewInt(10_000_000)}},
-			govParamsAfter.DepositParams.MinDeposit,
-			"x/gov DepositParams min deposit after upgrade should be 10_000_000 ukava",
-		)
-
-		expectedParams := govtypes.Params{
-			MinDeposit:                 sdk.NewCoins(sdk.NewCoin("ua0gi", sdk.NewInt(10_000_000))),
-			MaxDepositPeriod:           mustParseDuration("172800s"),
-			VotingPeriod:               mustParseDuration("30s"),
-			Quorum:                     "0.334000000000000000",
-			Threshold:                  "0.500000000000000000",
-			VetoThreshold:              "0.334000000000000000",
-			MinInitialDepositRatio:     "0.000000000000000000",
-			BurnVoteQuorum:             false,
-			BurnProposalDepositPrevote: false,
-			BurnVoteVeto:               true,
-		}
-		suite.Require().Equal(expectedParams, *govParamsAfter.Params, "x/gov params after upgrade should be as expected")
+	afterPrecisebankBalRes, err := grpcClient.Query.Bank.Balance(afterUpgradeCtx, &banktypes.QueryBalanceRequest{
+		Address: precisebankAddr,
+		Denom:   precisebanktypes.IntegerCoinDenom,
 	})
-}
+	suite.Require().NoError(err)
+	suite.Require().NotNil(afterPrecisebankBalRes.Balance)
+	// 2 total in reserve- genesis.json has 5 accounts with fractional balances
+	// totalling 2 integer coins
+	suite.Require().Equal(int64(2), afterPrecisebankBalRes.Balance.Amount.Int64())
 
-func (suite *IntegrationTestSuite) TestUpgradeParams_Consensus() {
-	suite.SkipIfUpgradeDisabled()
+	suite.T().Logf("x/evmutil balances after upgrade: %s", afterEvmutilBalRes.Balance)
+	suite.T().Logf("x/precisebank balances after upgrade: %s", afterPrecisebankBalRes.Balance)
 
-	afterUpgradeCtx := suite.ZgChain.Grpc.CtxAtHeight(suite.UpgradeHeight)
+	sumFractional, err := grpcClient.Query.Precisebank.TotalFractionalBalances(
+		afterUpgradeCtx,
+		&precisebanktypes.QueryTotalFractionalBalancesRequest{},
+	)
+	suite.Require().NoError(err)
 
-	grpcClient := suite.ZgChain.Grpc
-	paramsAfter, err := grpcClient.Query.Consensus.Params(afterUpgradeCtx, &consensustypes.QueryParamsRequest{})
-	suite.NoError(err)
+	suite.Require().Equal(
+		sumFractional.Total.Amount,
+		afterPrecisebankBalRes.Balance.Amount.Mul(precisebanktypes.ConversionFactor()),
+		"reserve should match exactly sum fractional balances",
+	)
 
-	// v25 consensus params from x/params should be migrated to x/consensus
-	expectedParams := tmproto.ConsensusParams{
-		Block: &tmproto.BlockParams{
-			MaxBytes: 22020096,
-			MaxGas:   20000000,
-		},
-		Evidence: &tmproto.EvidenceParams{
-			MaxAgeNumBlocks: 100000,
-			MaxAgeDuration:  *mustParseDuration("172800s"),
-			MaxBytes:        1048576,
-		},
-		Validator: &tmproto.ValidatorParams{
-			PubKeyTypes: []string{
-				tmtypes.ABCIPubKeyTypeEd25519,
-			},
-		},
-		Version: nil,
-	}
-	suite.Require().Equal(expectedParams, *paramsAfter.Params, "x/consensus params after upgrade should be as expected")
-}
+	// Check remainder + total fractional balances = reserve balance
+	remainderRes, err := grpcClient.Query.Precisebank.Remainder(
+		afterUpgradeCtx,
+		&precisebanktypes.QueryRemainderRequest{},
+	)
+	suite.Require().NoError(err)
 
-// func (suite *IntegrationTestSuite) TestUpgradeParams_CDP_Interval() {
-// 	suite.SkipIfUpgradeDisabled()
+	sumFractionalAndRemainder := sumFractional.Total.Add(remainderRes.Remainder)
+	reserveBalanceExtended := afterPrecisebankBalRes.Balance.Amount.Mul(precisebanktypes.ConversionFactor())
 
-// 	beforeUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight - 1)
-// 	afterUpgradeCtx := suite.Kava.Grpc.CtxAtHeight(suite.UpgradeHeight)
-
-// 	grpcClient := suite.Kava.Grpc
-
-// 	paramsBefore, err := grpcClient.Query.Cdp.Params(beforeUpgradeCtx, &cdptypes.QueryParamsRequest{})
-// 	suite.Require().NoError(err)
-// 	paramsAfter, err := grpcClient.Query.Cdp.Params(afterUpgradeCtx, &cdptypes.QueryParamsRequest{})
-// 	suite.Require().NoError(err)
-
-// 	expectedParams := paramsBefore.Params
-// 	expectedParams.LiquidationBlockInterval = int64(50)
-
-// 	suite.Require().Equal(expectedParams, paramsAfter.Params,
-// 		"expected cdp parameters to equal previous parameters with a liquidation block interval of 100")
-// }
-
-func mustParseDuration(s string) *time.Duration {
-	d, err := time.ParseDuration(s)
-	if err != nil {
-		panic(err)
-	}
-	return &d
+	suite.Require().Equal(
+		sumFractionalAndRemainder.Amount,
+		reserveBalanceExtended,
+		"remainder + sum(fractional balances) should be = reserve balance",
+	)
 }

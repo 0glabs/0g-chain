@@ -17,13 +17,13 @@ Reference implementation of 0G Chain, the first modular AI chain. Built using th
 <!---
 ## Mainnet
 
-The current recommended version of the software for mainnet is [v0.25.0](https://github.com/Kava-Labs/kava/releases/tag/v0.25.0) The master branch of this repository often contains considerable development work since the last mainnet release and is __not__ runnable on mainnet.
+The current recommended version of the software for mainnet is [v0.26.2](https://github.com/Kava-Labs/kava/releases/tag/v0.26.2) The `master` branch of this repository often contains considerable development work since the last mainnet release and is __not__ runnable on mainnet.
 
 ### Installation and Setup
-For detailed instructions see [the Kava docs](https://docs.kava.io/docs/participate/validator-node).
+For detailed instructions see [the Kava docs](https://docs.kava.io/docs/nodes-and-validators/validator-node).
 
 ```bash
-git checkout v0.25.0
+git checkout v0.26.2
 make install
 ```
 
@@ -49,7 +49,7 @@ If you have technical questions or concerns, ask a developer or community member
 
 ## Security
 
-If you find a security issue, please report it to security [at] kava.io. Depending on the verification and severity, a bug bounty may be available.
+If you find a security issue, please report it to security [at] kavalabs.io. Depending on the verification and severity, a bug bounty may be available.
 
 ## License
 

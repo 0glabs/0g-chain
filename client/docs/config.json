@@ -183,6 +183,23 @@
       }
     },
     {
+      "url": "./out/swagger/kava/precisebank/v1/query.swagger.json",
+      "tags": {
+        "rename": {
+          "Query": "Precisebank"
+        }
+      },
+      "operationIds": {
+        "rename": [
+          {
+            "type": "regex",
+            "from": "(.*)",
+            "to": "Precisebank$1"
+          }
+        ]
+      }
+    },
+    {
       "url": "./out/swagger/kava/pricefeed/v1beta1/query.swagger.json",
       "tags": {
         "rename": {
@@ -292,6 +309,30 @@
         "exclude": [
           "^/ibc/apps/interchain_accounts/.*",
           "^/ibc/apps/fee/.*"
+        ]
+      }
+    },
+    {
+      "url": "./client/docs/ethermint-swagger.yml",
+      "dereference": {
+        "circular": "ignore"
+      },
+      "tags": {
+        "rename": {
+          "Query": "Ethermint"
+        }
+      },
+      "operationIds": {
+        "rename": [
+          {
+            "type": "regex",
+            "from": "(.*)",
+            "to": "Ethermint$1"
+          }
+        ]
+      },
+      "paths": {
+        "exclude": [
         ]
       }
     },

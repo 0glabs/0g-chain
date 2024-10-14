@@ -3,16 +3,18 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
+	dbm "github.com/cometbft/cometbft-db"
+	tmcfg "github.com/cometbft/cometbft/config"
+	tmcli "github.com/cometbft/cometbft/libs/cli"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/config"
 	"github.com/cosmos/cosmos-sdk/client/debug"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/server"
-
-	tmcfg "github.com/cometbft/cometbft/config"
-	tmcli "github.com/cometbft/cometbft/libs/cli"
+	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
@@ -29,8 +31,8 @@ import (
 	"github.com/0glabs/0g-chain/chaincfg"
 	"github.com/0glabs/0g-chain/cmd/0gchaind/iavlviewer"
 	"github.com/0glabs/0g-chain/cmd/0gchaind/rocksdb"
-	"github.com/0glabs/0g-chain/cmd/opendb"
 	"github.com/0glabs/0g-chain/crypto/vrf"
+	"github.com/Kava-Labs/opendb"
 )
 
 func customKeyringOptions() keyring.Option {
@@ -52,7 +54,7 @@ func NewRootCmd() *cobra.Command {
 		WithAccountRetriever(types.AccountRetriever{}).
 		WithBroadcastMode(flags.FlagBroadcastMode).
 		WithHomeDir(chaincfg.DefaultNodeHome).
-		WithKeyringOptions(customKeyringOptions()).
+		WithKeyringOptions(hd.EthSecp256k1Option()).
 		WithViper(chaincfg.EnvPrefix)
 	rootCmd := &cobra.Command{
 		Use:   chaincfg.AppName,
@@ -90,7 +92,14 @@ func NewRootCmd() *cobra.Command {
 	return rootCmd
 }
 
-// addSubCmds registers all the sub commands used by 0g-chain.
+// dbOpener is a function to open `application.db`, potentially with customized options.
+// dbOpener sets dataDir to "data", dbName to "application" and calls generic OpenDB function.
+func dbOpener(opts servertypes.AppOptions, rootDir string, backend dbm.BackendType) (dbm.DB, error) {
+	dataDir := filepath.Join(rootDir, "data")
+	return opendb.OpenDB(opts, dataDir, "application", backend)
+}
+
+// addSubCmds registers all the sub commands used by kava.
 func addSubCmds(rootCmd *cobra.Command, encodingConfig params.EncodingConfig, defaultNodeHome string) {
 	gentxModule, ok := app.ModuleBasics[genutiltypes.ModuleName].(genutil.AppModuleBasic)
 	if !ok {
@@ -120,7 +129,7 @@ func addSubCmds(rootCmd *cobra.Command, encodingConfig params.EncodingConfig, de
 	opts := ethermintserver.StartOptions{
 		AppCreator:      ac.newApp,
 		DefaultNodeHome: chaincfg.DefaultNodeHome,
-		DBOpener:        opendb.OpenDB,
+		DBOpener:        dbOpener,
 	}
 	// ethermintserver adds additional flags to start the JSON-RPC server for evm support
 	ethermintserver.AddCommands(

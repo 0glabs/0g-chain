@@ -28,6 +28,7 @@ import (
 	committeetypes "github.com/0glabs/0g-chain/x/committee/types"
 	evmutiltypes "github.com/0glabs/0g-chain/x/evmutil/types"
 	issuancetypes "github.com/0glabs/0g-chain/x/issuance/types"
+	precisebanktypes "github.com/0glabs/0g-chain/x/precisebank/types"
 	pricefeedtypes "github.com/0glabs/0g-chain/x/pricefeed/types"
 )
 
@@ -60,11 +61,12 @@ type QueryClient struct {
 
 	// kava module query clients
 
-	Bep3      bep3types.QueryClient
-	Committee committeetypes.QueryClient
-	Evmutil   evmutiltypes.QueryClient
-	Issuance  issuancetypes.QueryClient
-	Pricefeed pricefeedtypes.QueryClient
+	Bep3        bep3types.QueryClient
+	Committee   committeetypes.QueryClient
+	Evmutil     evmutiltypes.QueryClient
+	Issuance    issuancetypes.QueryClient
+	Pricefeed   pricefeedtypes.QueryClient
+	Precisebank precisebanktypes.QueryClient
 }
 
 // NewQueryClient creates a new QueryClient and initializes all the module query clients
@@ -95,11 +97,12 @@ func NewQueryClient(grpcEndpoint string) (*QueryClient, error) {
 		IbcClient:   ibcclienttypes.NewQueryClient(conn),
 		IbcTransfer: ibctransfertypes.NewQueryClient(conn),
 
-		Bep3:      bep3types.NewQueryClient(conn),
-		Committee: committeetypes.NewQueryClient(conn),
-		Evmutil:   evmutiltypes.NewQueryClient(conn),
-		Issuance:  issuancetypes.NewQueryClient(conn),
-		Pricefeed: pricefeedtypes.NewQueryClient(conn),
+		Bep3:        bep3types.NewQueryClient(conn),
+		Committee:   committeetypes.NewQueryClient(conn),
+		Evmutil:     evmutiltypes.NewQueryClient(conn),
+		Issuance:    issuancetypes.NewQueryClient(conn),
+		Pricefeed:   pricefeedtypes.NewQueryClient(conn),
+		Precisebank: precisebanktypes.NewQueryClient(conn),
 	}
 	return client, nil
 }

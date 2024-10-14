@@ -83,6 +83,31 @@ TETHER_USDT_CONTRACT_DEPLOY=$(npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NA
 TETHER_USDT_CONTRACT_ADDRESS=${TETHER_USDT_CONTRACT_DEPLOY: -42}
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$TETHER_USDT_CONTRACT_ADDRESS" 0x6767114FFAA17C6439D7AEA480738B982CE63A02 1000000000000
 
+# deploy and fund axlBNB ERC20 contract
+AXL_BNB_CONTRACT_DEPLOY=$(npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" deploy-erc20 "axlBNB" axlBNB 18)
+AXL_BNB_CONTRACT_ADDRESS=${AXL_BNB_CONTRACT_DEPLOY: -42}
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_BNB_CONTRACT_ADDRESS" 0x6767114FFAA17C6439D7AEA480738B982CE63A02 1000000000000000000000
+
+# deploy and fund axlBUSD ERC20 contract
+AXL_BUSD_CONTRACT_DEPLOY=$(npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" deploy-erc20 "axlBUSD" axlBUSD 18)
+AXL_BUSD_CONTRACT_ADDRESS=${AXL_BUSD_CONTRACT_DEPLOY: -42}
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_BUSD_CONTRACT_ADDRESS" 0x6767114FFAA17C6439D7AEA480738B982CE63A02 1000000000000000000000
+
+# deploy and fund axlXRPB ERC20 contract
+AXL_XRPB_CONTRACT_DEPLOY=$(npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" deploy-erc20 "axlXRPB" axlXRPB 18)
+AXL_XRPB_CONTRACT_ADDRESS=${AXL_XRPB_CONTRACT_DEPLOY: -42}
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_XRPB_CONTRACT_ADDRESS" 0x6767114FFAA17C6439D7AEA480738B982CE63A02 1000000000000000000000
+
+# deploy and fund axlBTC ERC20 contract
+AXL_BTCB_CONTRACT_DEPLOY=$(npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" deploy-erc20 "axlBTCB" axlBTCB 18)
+AXL_BTCB_CONTRACT_ADDRESS=${AXL_BTCB_CONTRACT_DEPLOY: -42}
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_BTCB_CONTRACT_ADDRESS" 0x6767114FFAA17C6439D7AEA480738B982CE63A02 1000000000000000000000
+
+# deploy and fund native wBTC ERC20 contract
+WBTC_CONTRACT_DEPLOY=$(npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" deploy-erc20 "wBTC" wBTC 8)
+WBTC_CONTRACT_ADDRESS=${WBTC_CONTRACT_DEPLOY: -42}
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$WBTC_CONTRACT_ADDRESS" 0x6767114FFAA17C6439D7AEA480738B982CE63A02 100000000000000000
+
 # seed some evm wallets
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_WBTC_CONTRACT_ADDRESS" "$DEV_TEST_WALLET_ADDRESS" 10000000000000
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$MULTICHAIN_wBTC_CONTRACT_ADDRESS" "$DEV_TEST_WALLET_ADDRESS" 10000000000000
@@ -91,6 +116,11 @@ npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$wETH_CONTRAC
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_USDC_CONTRACT_ADDRESS" "$DEV_TEST_WALLET_ADDRESS" 100000000000
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$MULTICHAIN_USDT_CONTRACT_ADDRESS" "$DEV_TEST_WALLET_ADDRESS" 100000000000
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$TETHER_USDT_CONTRACT_ADDRESS" "$DEV_TEST_WALLET_ADDRESS" 1000000000000
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_BNB_CONTRACT_ADDRESS" "$DEV_TEST_WALLET_ADDRESS" 1000000000000000000000
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_BUSD_CONTRACT_ADDRESS" "$DEV_TEST_WALLET_ADDRESS" 1000000000000000000000
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_XRPB_CONTRACT_ADDRESS" "$DEV_TEST_WALLET_ADDRESS" 1000000000000000000000
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_BTCB_CONTRACT_ADDRESS" "$DEV_TEST_WALLET_ADDRESS" 1000000000000000000000
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$WBTC_CONTRACT_ADDRESS" "$DEV_TEST_WALLET_ADDRESS" 10000000000000
 # seed webapp E2E whale account
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_WBTC_CONTRACT_ADDRESS" "$WEBAPP_E2E_WHALE_ADDRESS" 100000000000000
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$MULTICHAIN_wBTC_CONTRACT_ADDRESS" "$WEBAPP_E2E_WHALE_ADDRESS" 10000000000000
@@ -99,6 +129,11 @@ npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$wETH_CONTRAC
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_USDC_CONTRACT_ADDRESS" "$WEBAPP_E2E_WHALE_ADDRESS" 10000000000000
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$MULTICHAIN_USDT_CONTRACT_ADDRESS" "$WEBAPP_E2E_WHALE_ADDRESS" 1000000000000
 npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$TETHER_USDT_CONTRACT_ADDRESS" "$WEBAPP_E2E_WHALE_ADDRESS" 1000000000000
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_BNB_CONTRACT_ADDRESS" "$WEBAPP_E2E_WHALE_ADDRESS" 10000000000000000000000
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_BUSD_CONTRACT_ADDRESS" "$WEBAPP_E2E_WHALE_ADDRESS" 10000000000000000000000
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_BTCB_CONTRACT_ADDRESS" "$WEBAPP_E2E_WHALE_ADDRESS" 10000000000000000000000
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$AXL_XRPB_CONTRACT_ADDRESS" "$WEBAPP_E2E_WHALE_ADDRESS" 10000000000000000000000
+npx hardhat --network "${ERC20_DEPLOYER_NETWORK_NAME}" mint-erc20 "$WBTC_CONTRACT_ADDRESS" "$WBTC_CONTRACT_ADDRESS" 10000000000000
 
 # give dev-wallet enough delegation power to pass proposals by itself
 
@@ -138,7 +173,7 @@ PARAM_CHANGE_PROP_TEMPLATE=$(
         {
             "subspace": "evmutil",
             "key": "EnabledConversionPairs",
-            "value": "[{\"kava_erc20_address\":\"MULTICHAIN_USDC_CONTRACT_ADDRESS\",\"denom\":\"erc20/multichain/usdc\"},{\"kava_erc20_address\":\"MULTICHAIN_USDT_CONTRACT_ADDRESS\",\"denom\":\"erc20/multichain/usdt\"},{\"kava_erc20_address\":\"MULTICHAIN_wBTC_CONTRACT_ADDRESS\",\"denom\":\"erc20/multichain/wbtc\"},{\"kava_erc20_address\":\"AXL_USDC_CONTRACT_ADDRESS\",\"denom\":\"erc20/axelar/usdc\"},{\"kava_erc20_address\":\"AXL_WBTC_CONTRACT_ADDRESS\",\"denom\":\"erc20/axelar/wbtc\"},{\"kava_erc20_address\":\"wETH_CONTRACT_ADDRESS\",\"denom\":\"erc20/axelar/eth\"},{\"kava_erc20_address\":\"TETHER_USDT_CONTRACT_ADDRESS\",\"denom\":\"erc20/tether/usdt\"}]"
+            "value": "[{\"kava_erc20_address\":\"MULTICHAIN_USDC_CONTRACT_ADDRESS\",\"denom\":\"erc20/multichain/usdc\"},{\"kava_erc20_address\":\"MULTICHAIN_USDT_CONTRACT_ADDRESS\",\"denom\":\"erc20/multichain/usdt\"},{\"kava_erc20_address\":\"MULTICHAIN_wBTC_CONTRACT_ADDRESS\",\"denom\":\"erc20/multichain/wbtc\"},{\"kava_erc20_address\":\"AXL_USDC_CONTRACT_ADDRESS\",\"denom\":\"erc20/axelar/usdc\"},{\"kava_erc20_address\":\"AXL_WBTC_CONTRACT_ADDRESS\",\"denom\":\"erc20/axelar/wbtc\"},{\"kava_erc20_address\":\"wETH_CONTRACT_ADDRESS\",\"denom\":\"erc20/axelar/eth\"},{\"kava_erc20_address\":\"TETHER_USDT_CONTRACT_ADDRESS\",\"denom\":\"erc20/tether/usdt\"},{\"kava_erc20_address\":\"AXL_BNB_CONTRACT_ADDRESS\",\"denom\":\"bnb\"},{\"kava_erc20_address\":\"AXL_BUSD_CONTRACT_ADDRESS\",\"denom\":\"busd\"},{\"kava_erc20_address\":\"AXL_BTCB_CONTRACT_ADDRESS\",\"denom\":\"btcb\"},{\"kava_erc20_address\":\"AXL_XRPB_CONTRACT_ADDRESS\",\"denom\":\"xrpb\"},{\"kava_erc20_address\":\"WBTC_CONTRACT_ADDRESS\",\"denom\":\"erc20/bitgo/wbtc\"}]"
         }
     ]
 }
@@ -155,6 +190,11 @@ finalProposal="${finalProposal/AXL_USDC_CONTRACT_ADDRESS/$AXL_USDC_CONTRACT_ADDR
 finalProposal="${finalProposal/AXL_WBTC_CONTRACT_ADDRESS/$AXL_WBTC_CONTRACT_ADDRESS}"
 finalProposal="${finalProposal/wETH_CONTRACT_ADDRESS/$wETH_CONTRACT_ADDRESS}"
 finalProposal="${finalProposal/TETHER_USDT_CONTRACT_ADDRESS/$TETHER_USDT_CONTRACT_ADDRESS}"
+finalProposal="${finalProposal/AXL_BNB_CONTRACT_ADDRESS/$AXL_BNB_CONTRACT_ADDRESS}"
+finalProposal="${finalProposal/AXL_BUSD_CONTRACT_ADDRESS/$AXL_BUSD_CONTRACT_ADDRESS}"
+finalProposal="${finalProposal/AXL_BTCB_CONTRACT_ADDRESS/$AXL_BTCB_CONTRACT_ADDRESS}"
+finalProposal="${finalProposal/AXL_XRPB_CONTRACT_ADDRESS/$AXL_XRPB_CONTRACT_ADDRESS}"
+finalProposal="${finalProposal/WBTC_CONTRACT_ADDRESS/$WBTC_CONTRACT_ADDRESS}"
 
 # create unique proposal filename
 proposalFileName="$(date +%s)-proposal.json"
@@ -184,6 +224,21 @@ sleep $AVG_SECONDS_BETWEEN_BLOCKS
 # fetch current module params
 updatedEvmUtilParams=$(curl https://api.app.internal.testnet.us-east.production.kava.io/kava/evmutil/v1beta1/params)
 printf "updated evm util module params\n %s" , "$updatedEvmUtilParams"
+
+# submit a kava token committee proposal
+COMMITTEE_PROP_TEMPLATE=$(
+  cat <<'END_HEREDOC'
+{
+    "@type": "/cosmos.gov.v1beta1.TextProposal",
+    "title": "The next big thing signaling proposal.",
+    "description": "The purpose of this proposal is to signal support/opposition to the next big thing"
+}
+END_HEREDOC
+)
+committeeProposalFileName="$(date +%s)-committee-proposal.json"
+echo "$COMMITTEE_PROP_TEMPLATE" >$committeeProposalFileName
+tokenCommitteeId=4
+kava tx committee submit-proposal "$tokenCommitteeId" "$committeeProposalFileName" --gas auto --gas-adjustment 1.5 --gas-prices 0.01ukava --from god -y
 
 # if adding more cosmos coins -> er20s, ensure that the deployment order below remains the same.
 # convert 1 HARD to an erc20. doing this ensures the contract is deployed.
